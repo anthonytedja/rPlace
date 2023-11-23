@@ -4,13 +4,19 @@
   "description": "",
   "main": "place.js",
   "scripts": {
+    "build": "npx tsc",
+    "check-types": "tsc --pretty --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "JSON": "^1.0.0",
     "express": "^4.16.4",
-    "ws": "^6.1.2"
+    "JSON": "^1.0.0",
+    "ws": "^6.2.2"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.3.2"
   }
 }

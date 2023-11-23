@@ -1,7 +1,7 @@
 import { Board } from '../domain/board'
-import { SocketServer, onClose } from '../socket/socket'
+import { SocketServer } from '../socket/socket'
 
-// create socket
+// create socket with new board
 new SocketServer(new Board())
 
 // Static content

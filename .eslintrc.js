@@ -29,6 +29,21 @@ module.exports = {
     'react/no-unescaped-entities': 0,
     'react/require-default-props': 0,
     'react/no-unused-prop-types': 0,
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          // Other packages come after.
+          ['^@', '^\\w'],
+          // Parent imports. Put `..` last.
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+          // Style imports.
+          ['^.+\\.?(css)$'],
+        ],
+      },
+    ],
   },
   parser: '@typescript-eslint/parser',
 }

@@ -1,5 +1,5 @@
-import { Board } from '../domain/board'
 import { SocketServer } from '../socket/socket'
+import { Board } from '../domain/board'
 
 // create socket with new board
 new SocketServer(new Board())
@@ -10,7 +10,7 @@ var app = express()
 
 // static_files has all of statically returned content
 // https://expressjs.com/en/starter/static-files.html
-app.use('/', express.static('static_files')) // this directory has files to be returned
+app.use('/', express.static('../../static_files')) // this directory has files to be returned
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!')

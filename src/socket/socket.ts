@@ -1,13 +1,6 @@
 import WebSocket from 'ws'
 import { Board } from '../domain/board'
 
-export function onMessage() {}
-export function onConnection() {}
-export function onClose() {
-  console.log('disconnected')
-}
-export function broadcast(data: string) {}
-
 class Connection {
   constructor(
     private websocket: WebSocket,
@@ -65,7 +58,7 @@ export class SocketServer {
   }
 
   private setBindings() {
-    this.wss.on('close', onClose)
+    this.wss.on('close', this.onClose)
   }
 
   onClose() {

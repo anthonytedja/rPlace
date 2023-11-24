@@ -1,11 +1,11 @@
-import {foo} from "./thing.js"
 import PlaceCanvas from "./place-canvas.js"
-
-foo()
 
 var socket
 
 $(function () {
+	// TODO: canvas
+	//let canvas = new PlaceCanvas(250, 250);
+
 	// socket = new WebSocket("ws://cslinux.utm.utoronto.ca:8001");
 	// socket = new WebSocket("ws://localhost:8001");
 	socket = new WebSocket('ws://' + window.location.hostname + ':8081')
@@ -21,9 +21,19 @@ $(function () {
 	socket.onmessage = function (event) {
 		var o = JSON.parse(event.data)
 
+		// TODO: replace
 		var context = document.getElementById('canvas').getContext('2d')
 		context.fillStyle = 'rgb(' + o.r + ',' + o.g + ',' + o.b + ')'
 		context.fillRect(o.x, o.y, 1, 1)
+
+		/* TODO: for initial board send
+		canvas.parseBinary(some data from event);
+		canvas.displayBufferedDraws();
+		*/
+
+		/* TODO: for pixel updates
+		canvas.drawPixelToDisplay(o.x, o.y, 'rgb('+o.r+','+o.g+','+o.b+')');
+		*/
 	}
 
 	// Comment out the event handler below when in production

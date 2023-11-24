@@ -1,9 +1,12 @@
 version: "3.4"
 services:
-  backend:
+  server:
     build: .
     networks:
       - place-net
+    ports:
+      - "8080:8080"
+      - "8081:8081"
 
   redis:
     image: redis

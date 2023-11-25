@@ -1,9 +1,10 @@
 import path from 'path';
-import { SocketServer } from '../socket/socket'
+import { SocketServer } from '../socket/socket-server'
 import { Board } from '../domain/board'
+import { DevCache } from '../api/cache/impl/dev-cache';
 
 // create socket with new board
-new SocketServer(new Board())
+new SocketServer(new DevCache(), new Board())
 
 // Static content
 var express = require('express')

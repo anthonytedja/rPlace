@@ -7,9 +7,9 @@ export interface Color {
 }
 
 export const Colors = {
-  Red: { encode: 'R', hex: 'FFFFFF' },
-  Yellow: { encode: 'Y', hex: 'FFFFFF' },
-  Green: { encode: 'G', hex: 'FFFFFF' },
+  Red: { encode: 'R', hex: 'FF0000' },
+  Yellow: { encode: 'Y', hex: 'FFD300' },
+  Green: { encode: 'G', hex: '32612D' },
 }
 
 export function hexToColor(hex: string): Color | undefined {

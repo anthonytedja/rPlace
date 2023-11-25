@@ -31,14 +31,13 @@
     <canvas id="canvas" width="250" height="250"></canvas>
     <form id="setForm">
       (<input type="number" id="x" placeholder="x" min="0" max="250" />,
-      <input type="number" id="y" placeholder="y" min="0" max="250" />) &nbsp; &nbsp; &nbsp; (<input
-        type="number"
-        id="r"
-        placeholder="r"
-        min="0"
-        max="255"
-      />, <input type="number" id="g" placeholder="g" min="0" max="255" />,
-      <input type="number" id="b" placeholder="b" min="0" max="255" />) &nbsp; &nbsp; &nbsp;
+      <input type="number" id="y" placeholder="y" min="0" max="250" />) &nbsp; &nbsp; &nbsp;
+      <select id="hex">
+        <option value="FF0000">red</option>
+        <option value="FFD300">yellow</option>
+        <option value="32612D">green</option>
+      </select>
+      &nbsp; &nbsp; &nbsp;
       <input type="submit" name="set" value="set" />
     </form>
   </body>

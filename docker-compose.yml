@@ -7,16 +7,18 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+    depends_on:
+      - redis
 
   redis:
     image: redis
     networks:
       - place-net
 
-  cassandra:
-    image: cassandra
-    networks:
-      - place-net
+  # cassandra:
+  #   image: cassandra
+  #   networks:
+  #     - place-net
 
 networks:
   place-net:

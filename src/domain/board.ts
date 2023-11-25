@@ -1,11 +1,11 @@
 import { Color, Colors, hexToColor } from './color'
 
 export class Board {
-  size: number = 250
+  static size: number = 250
   private data: Array<Color>
 
   constructor() {
-    this.data = new Array(this.size * this.size)
+    this.data = new Array(Board.size * Board.size)
     this.data.fill(Colors.Red)
   }
 
@@ -24,8 +24,8 @@ export class Board {
       !Number.isInteger(y) ||
       x < 0 ||
       y < 0 ||
-      x >= this.size ||
-      y >= this.size
+      x >= Board.size ||
+      y >= Board.size
 
     return !outOfBounds
   }
@@ -40,6 +40,6 @@ export class Board {
       throw new Error(`Out of bounds: (${x}, ${y})`)
     }
 
-    this.data[y * this.size + x] = color
+    this.data[y * Board.size + x] = color
   }
 }

@@ -52,7 +52,7 @@ export default class PlaceCanvas {
   }
 
   getIndexFromCoords(x, y) {
-    return x * this.width + y
+    return y * this.width + x
   }
 
   setColor(x, y, colorIdx) {

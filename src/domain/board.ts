@@ -21,7 +21,7 @@ export class Board {
 
   // does not return an index for the 8 bit array
   getIndexFromCoords(x: number, y: number) {
-    return x * Board.width + y
+    return y * Board.width + x
   }
 
   // returns an index for the 8 bit array

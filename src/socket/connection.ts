@@ -3,20 +3,16 @@ import { SocketServer } from './socket-server'
 
 export class Connection {
   constructor(public websocket: WebSocket, public socketServer: SocketServer) {
+    console.log("connection init")
     this.setBindings()
-    this.sendInitialBoard()
   }
 
   isAlive: boolean = true
 
   setBindings() {
-    setInterval(checkPing(this), 30000)
+    //setInterval(checkPing(this), 30000)
     this.websocket.on('message', onMessage(this))
     this.websocket.on('pong', onPong(this))
-  }
-
-  sendInitialBoard() {
-    this.websocket.send(this.socketServer.board?.toString())
   }
 }
 
@@ -39,18 +35,19 @@ function onMessage(c: Connection) {
     console.log('raw message:', message)
     
     var data = JSON.parse(message)
-    const [x, y, hex] = [data.x, data.y, data.hex]
-    if (x == undefined || y == undefined || hex == undefined) {
+    const [x, y, colorIdx] = [data.x, data.y, data.color]
+    if (x == undefined || y == undefined || colorIdx == undefined) {
       console.log(`garbage data from connection: ${message}`)
     }
-    console.log('message: ', x, y, hex)
+    console.log('message: ', x, y, colorIdx)
 
-    if (c.socketServer.board.isValidSet(x, y, hex)) {
+    if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
       console.log('valid set')
       c.socketServer.broadcast(message)
-      c.socketServer.board.set(x, y, hex)
-      c.socketServer.cache.set(x, y, hex)
-      c.socketServer.cache.getBoard()
+      c.socketServer.board.setPixel(x, y, colorIdx)
+      // c.socketServer.cache.set(x, y, colorIdx)
+      // c.socketServer.cache.getBoard()
+      // TODO: set bit in cassandra?
     }
 
     console.log('invalid set')

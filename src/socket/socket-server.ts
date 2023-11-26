@@ -25,12 +25,12 @@ export class SocketServer {
   }
 }
 
-function onClose(ss: SocketServer) {
+function onClose(wss: SocketServer) {
   return () => console.log('disconnected')
 }
 
-function onConnection(ss: SocketServer) {
+function onConnection(wss: SocketServer) {
   return (webSocket: WebSocket) => {
-    new Connection(webSocket, ss)
+    new Connection(webSocket, wss)
   }
 }

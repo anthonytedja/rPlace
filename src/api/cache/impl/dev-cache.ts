@@ -1,5 +1,4 @@
 import { RedisClientType, createClient as redisCreateClient } from 'redis'
-import { Color } from '../../../domain/color'
 import { Cache } from '../cache'
 import { Board } from '../../../domain/board'
 
@@ -13,15 +12,15 @@ export class DevCache implements Cache {
     return client
   }
 
-  async set(xPos: number, yPos: number, color: Color): Promise<void> {
+  async set(xPos: number, yPos: number, colorIdx: number): Promise<void> {
     return this.client.then((cli) =>
       cli.sendCommand([
         'BITFIELD',
         'place_board',
         'SET',
         'u4',
-        `#${yPos * Board.size + xPos}`,
-        color.encode,
+        `#${yPos * Board.width + xPos}`,
+        `${colorIdx}`,
       ])
     )
   }

@@ -1,5 +1,4 @@
 import { Client, types } from 'cassandra-driver';
-import { Color } from '../../../domain/color';
 import { Database } from '../database';
 
 const client = new Client({
@@ -9,10 +8,10 @@ const client = new Client({
 });
 
 class DevDatabase implements Database {
-  async set(xPos: number, yPos: number, color: Color, timestamp: Date): Promise<void> {
+  async set(xPos: number, yPos: number, colorIdx: number, timestamp: Date): Promise<void> {
     const query =
       'INSERT INTO color_mappings_keyspace.color_mappings (xPos, yPos, color, timestamp) VALUES (?, ?, ?, ?)';
-    await client.execute(query, [xPos, yPos, color, types.TimeUuid.fromDate(timestamp)], {
+    await client.execute(query, [xPos, yPos, colorIdx, types.TimeUuid.fromDate(timestamp)], {
       prepare: true,
     });
   }

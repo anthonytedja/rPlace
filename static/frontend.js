@@ -1,9 +1,10 @@
+//frontend.js
 import PlaceCanvas from './place-canvas.js'
+import { buildUrl } from './url-builder.js'
 
 var socket
 
 $(function () {
-  // TODO: canvas
   let canvas = new PlaceCanvas(250, 250);
 
   // socket = new WebSocket("ws://cslinux.utm.utoronto.ca:8001");
@@ -12,6 +13,16 @@ $(function () {
   socket.onopen = function (event) {
     $('#sendButton').removeAttr('disabled')
     console.log('connected')
+
+    // retrieve entire board
+    console.log('requesting board from server')
+    fetch(buildUrl("/api/board-bitmap"))
+    .then(res => res.arrayBuffer())
+    .then(res => {
+      const bitmap = new Uint8Array(res)
+      canvas.parseBinary(bitmap)
+      canvas.displayBufferedDraws()
+    })
   }
   socket.onclose = function (event) {
     alert('closed code:' + event.code + ' reason:' + event.reason + ' wasClean:' + event.wasClean)

@@ -1,12 +1,14 @@
 import { Board } from '../domain/board'
 
 export class BoardAdaptor {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static fromBinary(raw: string): Board {
     // stream of 4-bit values, each representing a color
     // cells are arranged in sequence left-to-right top-to-bottom
     return undefined as any
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static fromBoard(board: Board): string {
     // opposite of above function
     return undefined as any

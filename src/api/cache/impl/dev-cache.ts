@@ -1,6 +1,7 @@
-import { RedisClientType, createClient as redisCreateClient } from 'redis'
-import { Cache } from '../cache'
+import { createClient as redisCreateClient } from 'redis'
+
 import { Board } from '../../../domain/board'
+import { Cache } from '../cache'
 
 export class DevCache implements Cache {
   client = this.createClient()

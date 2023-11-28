@@ -1,6 +1,8 @@
 import WebSocket from 'ws'
-import { Board } from '../domain/board'
+
 import { Cache } from '../api/cache/cache'
+import { Board } from '../domain/board'
+
 import { Connection } from './connection'
 
 export class SocketServer {
@@ -25,6 +27,7 @@ export class SocketServer {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function onClose(wss: SocketServer) {
   return () => console.log('disconnected')
 }

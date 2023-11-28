@@ -1,24 +1,49 @@
-version: "3.4"
+version: '2.2'
 services:
   server:
+    container_name: server
     build: .
     networks:
       - place-net
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - '8080:8080'
+      - '8081:8081'
     depends_on:
+      - cassandra
       - redis
 
   redis:
+    container_name: redis
     image: redis
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 15s
+      timeout: 10s
+      retries: 10
     networks:
       - place-net
 
-  # cassandra:
-  #   image: cassandra
-  #   networks:
-  #     - place-net
+  cassandra:
+    container_name: cassandra
+    image: cassandra
+    ports:
+      - '9042:9042'
+    healthcheck:
+      test: ['CMD', 'cqlsh', '-e', 'describe keyspaces']
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    networks:
+      - place-net
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+      - ./schema/cassandra:/docker-entrypoint-initdb.d
+      # run the following command for now to create the keyspace:
+      # docker exec -it cassandra bash
+      # cqlsh -f /docker-entrypoint-initdb.d/schema.cql
 
 networks:
   place-net:
+
+volumes:
+  cassandra_data:

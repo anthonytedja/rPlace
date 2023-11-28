@@ -3,12 +3,10 @@
     // Required Extensions
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    // Extra
     "streetsidesoftware.code-spell-checker",
     "usernamehw.errorlens",
-    // Extra
     "ms-vsliveshare.vsliveshare",
-    "Postman.postman-for-vscode",
-    "GitHub.vscode-github-actions",
     "davidanson.vscode-markdownlint",
   ]
 }

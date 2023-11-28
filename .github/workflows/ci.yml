@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
 jobs:
@@ -29,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run lint command
+        run: npm run lint
+
       - name: Run check-types command
-        run: npm check-types
+        run: npm run check-types

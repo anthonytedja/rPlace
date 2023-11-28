@@ -1,9 +1,10 @@
 import WebSocket from 'ws'
+
 import { SocketServer } from './socket-server'
 
 export class Connection {
   constructor(public websocket: WebSocket, public socketServer: SocketServer) {
-    console.log("connection init")
+    console.log('connection init')
     this.setBindings()
   }
 
@@ -16,6 +17,7 @@ export class Connection {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function checkPing(c: Connection) {
   return () => {
     if (c.websocket.readyState == WebSocket.OPEN) {
@@ -33,7 +35,7 @@ function checkPing(c: Connection) {
 function onMessage(c: Connection) {
   return (message: string) => {
     console.log('raw message:', message)
-    
+
     var data = JSON.parse(message)
     const [x, y, colorIdx] = [data.x, data.y, data.color]
     if (x == undefined || y == undefined || colorIdx == undefined) {
@@ -48,9 +50,9 @@ function onMessage(c: Connection) {
       // c.socketServer.cache.set(x, y, colorIdx)
       // c.socketServer.cache.getBoard()
       // TODO: set bit in cassandra?
+    } else {
+      console.log('invalid set')
     }
-
-    console.log('invalid set')
   }
 }
 

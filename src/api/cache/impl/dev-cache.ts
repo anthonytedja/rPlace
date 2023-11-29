@@ -34,7 +34,6 @@ export class DevCache implements Cache {
 
   async getBoard(): Promise<Board> {
     const data: string = (await this.client.then((cli) => cli.get('place_board'))) || ''
-    console.log(data)
-    return new Board()
+    return Promise.resolve(new Board(new Uint8ClampedArray(new TextEncoder().encode(data))))
   }
 }

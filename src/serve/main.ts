@@ -20,9 +20,9 @@ const publicPath = path.resolve(__dirname, '../../')
 app.use('/', express.static(publicPath)) // this directory has files to be returned
 
 // send the entire board in a bitmap representation
-app.get('/api/board-bitmap', (req: Request, res: Response) => {
+    app.get('/api/board-bitmap', async (req: Request, res: Response) => {
   console.log('sending board')
-  const buffer = board.getData()
+      const buffer = (await ss.getBoard()).getData()
   res.send(Buffer.from(buffer))
 })
 

@@ -17,6 +17,10 @@ export class SocketServer {
     this.setBindings()
   }
 
+  async getBoard(): Promise<Board> {
+    return this.cache.getBoard()
+  }
+
   private setBindings() {
     this.wss.on('close', onClose(this))
     this.wss.on('connection', onConnection(this))

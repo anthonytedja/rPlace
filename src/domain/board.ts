@@ -1,4 +1,5 @@
 import { MAX_COLOR_INDEX } from './color'
+import { DimensionConvert } from './dimension-convert'
 
 export class Board {
   static size: number = 250
@@ -16,11 +17,6 @@ export class Board {
 
   getData(): Uint8ClampedArray {
     return this.dataArray
-  }
-
-  // does not return an index for the 8 bit array
-  getIndexFromCoords(x: number, y: number) {
-    return y * Board.width + x
   }
 
   // returns an index for the 8 bit array
@@ -52,7 +48,7 @@ export class Board {
       throw new Error(`Out of bounds: (${x}, ${y})`)
     }
 
-    let idx = this.getIndexFromCoords(x, y)
+    let idx = DimensionConvert.PosToCell(x, y)
     let idxBitArray = this.getArrayIndex(idx)
 
     if (idx % 2 == 0) {

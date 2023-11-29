@@ -46,9 +46,7 @@ function onMessage(c: Connection) {
     if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
       console.log('valid set')
       c.socketServer.broadcast(message)
-      c.socketServer.board.setPixel(x, y, colorIdx)
-      // c.socketServer.cache.set(x, y, colorIdx)
-      // c.socketServer.cache.getBoard()
+      c.socketServer.cache.set(x, y, colorIdx)
       // TODO: set bit in cassandra?
     } else {
       console.log('invalid set')

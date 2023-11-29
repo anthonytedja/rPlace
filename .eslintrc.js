@@ -23,21 +23,6 @@ module.exports = {
     'no-confusing-arrow': 0,
     'operator-linebreak': 0,
     'arrow-body-style': 0,
-    'simple-import-sort/imports': [
-      'error',
-      {
-        groups: [
-          // Other packages come after.
-          ['^@', '^\\w'],
-          // Parent imports. Put `..` last.
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
-          // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-          // Style imports.
-          ['^.+\\.?(css)$'],
-        ],
-      },
-    ],
   },
   parser: '@typescript-eslint/parser',
 }

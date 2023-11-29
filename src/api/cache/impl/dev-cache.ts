@@ -20,7 +20,7 @@ export class DevCache implements Cache {
         'place_board',
         'SET',
         'u4',
-        `#${yPos * Board.width + xPos}`,
+        `#${yPos * Board.size + xPos}`,
         `${colorIdx}`,
       ])
     )

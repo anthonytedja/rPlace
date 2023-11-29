@@ -1,8 +1,7 @@
 import { MAX_COLOR_INDEX } from './color'
 
 export class Board {
-  static width: number = 250
-  static height: number = 250
+  static size: number = 250
 
   private data: ArrayBuffer // should be an even size
   private dataArray: Uint8ClampedArray // work with the actual data through this
@@ -38,9 +37,9 @@ export class Board {
       Number.isInteger(x) &&
       Number.isInteger(y) &&
       0 <= x &&
-      x < Board.width &&
+      x < Board.size &&
       0 <= y &&
-      y < Board.height
+      y < Board.size
     return inBounds
   }
 

@@ -9,10 +9,15 @@ export class Board {
   private upperMask: number = 240
   private lowerMask: number = 15
 
-  constructor() {
-    this.data = new ArrayBuffer(Math.floor((Board.width * Board.height) / 2))
+  constructor(dataArrayOverride: Uint8ClampedArray | undefined = undefined) {
+    this.data = new ArrayBuffer(Math.floor((Board.size * Board.size) / 2))
+
     // each index in the 8 bit array contains info for 2 tiles
-    this.dataArray = new Uint8ClampedArray(this.data)
+    if (dataArrayOverride != undefined) {
+      this.dataArray = dataArrayOverride
+    } else {
+      this.dataArray = new Uint8ClampedArray(this.data)
+    }
   }
 
   getData(): Uint8ClampedArray {

@@ -8,6 +8,10 @@ import { Connection } from './connection'
 export class SocketServer {
   wss: WebSocket.Server
 
+  async setup(): Promise<void> {
+    return this.cache.setBoard(this.board)
+  }
+
   constructor(public cache: Cache, public board: Board) {
     this.wss = new WebSocket.Server({ port: 8081 })
     this.setBindings()

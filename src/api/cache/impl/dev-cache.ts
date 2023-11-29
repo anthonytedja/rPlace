@@ -13,6 +13,12 @@ export class DevCache implements Cache {
     return client
   }
 
+  // should only be ran once at the start, and with data from cassandra
+  async setBoard(board: Board): Promise<any> {
+    const boardEncoding = new TextDecoder().decode(board.getData())
+    return this.client.then((cli) => cli.set('place_board', boardEncoding))
+  }
+
   async set(xPos: number, yPos: number, colorIdx: number): Promise<void> {
     return this.client.then((cli) =>
       cli.sendCommand([

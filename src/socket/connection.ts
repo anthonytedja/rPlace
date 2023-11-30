@@ -10,9 +10,9 @@ export class Connection {
 
   isAlive: boolean = true
 
-  setBindings() {
+  async setBindings() {
     //setInterval(checkPing(this), 30000)
-    this.websocket.on('message', onMessage(this))
+    this.websocket.on('message', await onMessage(this))
     this.websocket.on('pong', onPong(this))
   }
 }
@@ -32,8 +32,8 @@ function checkPing(c: Connection) {
   }
 }
 
-function onMessage(c: Connection) {
-  return (message: string) => {
+async function onMessage(c: Connection) {
+  return async (message: string) => {
     console.log('raw message:', message)
 
     var data = JSON.parse(message)
@@ -45,9 +45,16 @@ function onMessage(c: Connection) {
 
     if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
       console.log('valid set')
+
+      const canUpdate = await c.socketServer.board.canUpdate()
+      if (!canUpdate) {
+        console.log('too soon')
+        return
+      }
+
       c.socketServer.broadcast(message)
-      c.socketServer.cache.set(x, y, colorIdx)
-      // TODO: set bit in cassandra?
+      await c.socketServer.cache.set(x, y, colorIdx)
+      await c.socketServer.board.setPixel(x, y, colorIdx)
     } else {
       console.log('invalid set')
     }

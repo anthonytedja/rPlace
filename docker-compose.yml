@@ -8,9 +8,16 @@ services:
     ports:
       - '8080:8080'
       - '8081:8081'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080']
+      interval: 15s
+      timeout: 10s
+      retries: 10
     depends_on:
-      - cassandra
-      - redis
+      cassandra:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   redis:
     container_name: redis

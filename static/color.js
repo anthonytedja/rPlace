@@ -20,7 +20,7 @@ export const DEFAULT_COLOR_PALETTE = [
   '#CF6EE4', // magenta
   '#820080', // purple
 ]
-// the internal color palette structure stores colors as AGBR (reversed RGBA)
+// the internal color palette structure stores colors as ABGR (reversed RGBA)
 // to make writing to the color buffer easier
 export const PALETTE_ABGR = mapColorPalette(DEFAULT_COLOR_PALETTE)
 
@@ -45,7 +45,7 @@ function parseHexColor(hexColor) {
   }
 }
 /**
- * Map an array of hex colors to an array of AGBR colors.
+ * Map an array of hex colors to an array of ABGR colors.
  */
 function mapColorPalette(palette) {
   var dataView = new DataView(new ArrayBuffer(4))

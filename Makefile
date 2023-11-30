@@ -10,6 +10,9 @@ check:
 	npm run lint
 	npm run check-types
 
+setup:
+	npm install
+
 kill:
 	docker-compose kill
 	docker-compose rm -f

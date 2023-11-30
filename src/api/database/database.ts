@@ -1,5 +1,6 @@
 export interface Database {
-  set(xPos: number, yPos: number, colorIdx: number, timestamp: Date): Promise<void>
-  setUserActionTimestamp(userIP: string, timestamp: Date): Promise<void>
+  getBoard(): Promise<number[][]>
+  set(xPos: number, yPos: number, colorIdx: number): Promise<void>
+  setUserActionTimestamp(userIP: string): Promise<void>
   getUserActionTimestamp(userIP: string): Promise<Date | null>
 }

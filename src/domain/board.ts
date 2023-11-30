@@ -1,5 +1,18 @@
+import { DevDatabase } from '../api/database/impl/dev-database'
 import { MAX_COLOR_INDEX } from './color'
 import { DimensionConvert } from './dimension-convert'
+
+// TODO: Delete when better ip checking is implemented
+export async function IP() {
+  return fetch('https://www.cloudflare.com/cdn-cgi/trace').then(async (response) => {
+    const data = await response.text()
+    const lines = data.split('\n')
+    const ipLine = lines.find((line) => line.startsWith('ip='))
+    return ipLine ? ipLine.split('=')[1] : ''
+  })
+}
+
+const db = new DevDatabase()
 
 export class Board {
   static size: number = 250
@@ -44,7 +57,24 @@ export class Board {
     return inBounds
   }
 
-  setPixel(x: number, y: number, colorIdx: number) {
+  async canUpdate() {
+    const userIP = await IP()
+    const lastTimestamp = await db.getUserActionTimestamp(userIP)
+    if (lastTimestamp === null) return true
+    const now = new Date()
+    const timeDiff = now.getTime() - lastTimestamp.getTime()
+    console.log(`timeDiff: ${timeDiff}`)
+    // 5 minutes
+    if (timeDiff <= 300000) {
+      // throw new Error(`Too soon for user IP ${userIP}: ${timeDiff} should be > 300000`)
+      return false
+    }
+    return true
+  }
+
+  async setPixel(x: number, y: number, colorIdx: number) {
+    const userIP = await IP()
+
     if (colorIdx > MAX_COLOR_INDEX) {
       throw new Error(`Invalid color: ${colorIdx}`)
     }
@@ -66,6 +96,8 @@ export class Board {
       this.dataArray[idxBitArray] |= colorIdx
     }
 
+    await db.set(x, y, colorIdx)
+    await db.setUserActionTimestamp(userIP)
     console.log(`SET: ${x} ${y} ${colorIdx}`)
   }
 }

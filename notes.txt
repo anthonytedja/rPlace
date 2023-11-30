@@ -25,7 +25,7 @@ nodejs server.js # or npm start
 
 # visit http://cslinux.utm.utoronto.ca:PORT
 # NOTE: Change the PORT from 8080/8081 in place.js and index.html
-# so that you don't clobber eachothers ports.
+# so that you don't clobber each others ports.
 # My guess is that you will want to dockerize
 # the node application, then put it up on aws, see reference at bottom
 

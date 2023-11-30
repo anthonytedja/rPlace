@@ -4,15 +4,22 @@ import { Cache } from '../api/cache/cache'
 import { Board } from '../domain/board'
 
 import { Connection } from './connection'
+import { DevDatabase } from '../api/database/impl/dev-database'
+import { DevCache } from '../api/cache/impl/dev-cache'
 
 export class SocketServer {
   wss: WebSocket.Server
+  cache: Cache = new DevCache()
+  board: Board = new Board()
 
   async setup(): Promise<void> {
+    const database = new DevDatabase()
+    const data = await database.getAndFormatBoard()
+    this.board = new Board(data)
     return this.cache.setBoard(this.board)
   }
 
-  constructor(public cache: Cache, public board: Board) {
+  constructor() {
     this.wss = new WebSocket.Server({ port: 8081 })
     this.setBindings()
   }

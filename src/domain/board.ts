@@ -8,7 +8,7 @@ export async function IP() {
     const data = await response.text()
     const lines = data.split('\n')
     const ipLine = lines.find((line) => line.startsWith('ip='))
-    return ipLine ? ipLine.split('=')[1] : ''
+    return ipLine ? ipLine.split('=')[1] : 'unknown'
   })
 }
 
@@ -22,22 +22,20 @@ export class Board {
   private upperMask: number = 240
   private lowerMask: number = 15
 
-  constructor(dataArrayOverride: Uint8ClampedArray | undefined = undefined) {
+  constructor(dataArrayOverride?: Uint8ClampedArray) {
     this.data = new ArrayBuffer(Math.floor((Board.size * Board.size) / 2))
 
     // each index in the 8 bit array contains info for 2 tiles
-    if (dataArrayOverride != undefined) {
-      this.dataArray = dataArrayOverride
-    } else {
-      this.dataArray = new Uint8ClampedArray(this.data)
-    }
+    this.dataArray = dataArrayOverride ?? new Uint8ClampedArray(this.data)
   }
 
   getData(): Uint8ClampedArray {
     return this.dataArray
   }
 
-  // returns an index for the 8 bit array
+  /**
+   * @returns an index for the 8 bit array
+   */
   getArrayIndex(idx: number) {
     return Math.floor(idx / 2)
   }
@@ -47,16 +45,19 @@ export class Board {
   }
 
   inBounds(x: number, y: number) {
-    const inBounds =
+    return (
       Number.isInteger(x) &&
       Number.isInteger(y) &&
       0 <= x &&
       x < Board.size &&
       0 <= y &&
       y < Board.size
-    return inBounds
+    )
   }
 
+  /**
+   * @returns true if the user can update the board (last update was > 5 minutes ago)
+   */
   async canUpdate() {
     const userIP = await IP()
     const lastTimestamp = await db.getUserActionTimestamp(userIP)

@@ -1,12 +1,8 @@
-import { Board } from '../domain/board'
-import { DevCache } from '../api/cache/impl/dev-cache'
 import path from 'path'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 
-// create socket with new board
-const board = new Board() // we want to replace this with a board from cassandra on startup
-const ss = new SocketServer(new DevCache(), board)
+const ss = new SocketServer()
 
 ss.setup()
   .then(() => {

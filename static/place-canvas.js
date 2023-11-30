@@ -14,6 +14,33 @@ export default class PlaceCanvas {
     // currently neither are being used
     this.isBufferDirty = false
     this.isDisplyDirty = false
+
+    this.canvas.addEventListener('mouseout', () => {
+      const tooltip = document.getElementById('tooltip')
+      if (tooltip) {
+        tooltip.style.opacity = '0'
+      }
+    })
+
+    this.canvas.addEventListener('mousemove', (event) => {
+      const rect = this.canvas.getBoundingClientRect()
+      const x = Math.min(Math.round(event.clientX - rect.left), 249)
+      const y = Math.min(Math.round(event.clientY - rect.top), 249)
+
+      // Create tooltip element if it doesn't exist
+      let tooltip = document.getElementById('tooltip')
+      if (!tooltip) {
+        tooltip = document.createElement('div')
+        tooltip.id = 'tooltip'
+        document.body.appendChild(tooltip)
+      }
+
+      // Update tooltip content and position
+      tooltip.textContent = `x: ${x}, y: ${y}`
+      tooltip.style.left = `${event.pageX}px`
+      tooltip.style.top = `${event.pageY}px`
+      tooltip.style.opacity = '1'
+    })
   }
 
   /**

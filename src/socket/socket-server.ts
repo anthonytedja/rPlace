@@ -4,23 +4,27 @@ import { Cache } from '../api/cache/cache'
 import { Board } from '../domain/board'
 
 import { Connection } from './connection'
-import { DevDatabase } from '../api/database/impl/dev-database'
+import { Database } from '../api/database/database'
 import { DevCache } from '../api/cache/impl/dev-cache'
+import { UserHandler } from '../domain/user-handler'
 
 export class SocketServer {
   wss: WebSocket.Server
+  database: Database
   cache: Cache = new DevCache()
   board: Board = new Board()
+  userHandler: UserHandler
 
   async setup(): Promise<void> {
-    const database = new DevDatabase()
-    const data = await database.getAndFormatBoard()
+    const data = await this.database.getAndFormatBoard()
     this.board = new Board(data)
     return this.cache.setBoard(this.board)
   }
 
-  constructor() {
+  constructor(database: Database) {
     this.wss = new WebSocket.Server({ port: 8081 })
+    this.database = database
+    this.userHandler = new UserHandler(this.database)
     this.setBindings()
   }
 

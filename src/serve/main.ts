@@ -1,8 +1,10 @@
 import path from 'path'
+import { DevDatabase } from '../api/database/impl/dev-database'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 
-const ss = new SocketServer()
+const database = new DevDatabase()
+const ss = new SocketServer(database)
 
 ss.setup()
   .then(() => {

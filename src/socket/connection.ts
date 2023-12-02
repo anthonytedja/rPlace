@@ -46,7 +46,7 @@ async function onMessage(c: Connection) {
     if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
       console.log('valid set')
 
-      const canUpdate = await c.socketServer.board.canUpdate()
+      const canUpdate = await c.socketServer.userHandler.canUpdate()
       if (!canUpdate) {
         console.log('too soon')
         return

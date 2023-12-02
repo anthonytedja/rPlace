@@ -1,4 +1,7 @@
+import { Board } from '../../../domain/board'
+import { BoardDataGrid } from '../../../domain/board-data-grid'
 import { Database } from '../database'
+import { DimensionConvert } from '../../../domain/dimension-convert'
 
 export class DevDatabase implements Database {
   client = this.createClient()
@@ -33,18 +36,14 @@ export class DevDatabase implements Database {
     const client = await this.client
     const result = await client.execute(query)
 
-    const data = new ArrayBuffer(Math.floor((250 * 250) / 2))
-    const dataArray = new Uint8ClampedArray(data)
+    const data = new BoardDataGrid(Board.size, Board.size)
 
     result.rows.forEach((row: any) => {
-      const idx = row.x * 250 + row.y
-      const arrayIdx = Math.floor(idx / 2)
-      const shift = (idx % 2) * 4
-      const mask = 15 << shift
-      dataArray[arrayIdx] = (dataArray[arrayIdx] & ~mask) | ((row.color & 15) << shift)
+      const idx = DimensionConvert.PosToCell(row.x, row.y)
+      data.setPixel(idx, row.color)
     })
 
-    return dataArray
+    return data.getData()
   }
 
   async set(xPos: number, yPos: number, colorIdx: number) {

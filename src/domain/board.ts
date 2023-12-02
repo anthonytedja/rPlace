@@ -27,13 +27,6 @@ export class Board {
     this.data.setData(data)
   }
 
-  /**
-   * @returns an index for the 8 bit array
-   */
-  getArrayIndex(idx: number) {
-    return Math.floor(idx / 2)
-  }
-
   isValidSet(x: number, y: number, colorIdx: number) {
     return colorIdx <= MAX_COLOR_INDEX && this.inBounds(x, y)
   }

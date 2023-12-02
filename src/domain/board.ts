@@ -1,6 +1,7 @@
 import { DevDatabase } from '../api/database/impl/dev-database'
 import { MAX_COLOR_INDEX } from './color'
 import { DimensionConvert } from './dimension-convert'
+import { BoardDataGrid } from './board-data-grid'
 
 // TODO: Delete when better ip checking is implemented
 export async function IP() {
@@ -17,20 +18,22 @@ const db = new DevDatabase()
 export class Board {
   static size: number = 250
 
-  private data: ArrayBuffer // should be an even size
-  private dataArray: Uint8ClampedArray // work with the actual data through this
-  private upperMask: number = 240
-  private lowerMask: number = 15
+  private data: BoardDataGrid
 
   constructor(dataArrayOverride?: Uint8ClampedArray) {
-    this.data = new ArrayBuffer(Math.floor((Board.size * Board.size) / 2))
+    this.data = new BoardDataGrid(Board.size, Board.size)
 
-    // each index in the 8 bit array contains info for 2 tiles
-    this.dataArray = dataArrayOverride ?? new Uint8ClampedArray(this.data)
+    if (typeof dataArrayOverride !== 'undefined') {
+      this.setData(dataArrayOverride)
+    }
   }
 
   getData(): Uint8ClampedArray {
-    return this.dataArray
+    return this.data.getData()
+  }
+
+  setData(data: Uint8ClampedArray) {
+    this.data.setData(data)
   }
 
   /**
@@ -85,17 +88,7 @@ export class Board {
     }
 
     let idx = DimensionConvert.PosToCell(x, y)
-    let idxBitArray = this.getArrayIndex(idx)
-
-    if (idx % 2 == 0) {
-      // modify upper bits
-      this.dataArray[idxBitArray] &= this.lowerMask
-      this.dataArray[idxBitArray] |= colorIdx << 4
-    } else {
-      // modify lower bits
-      this.dataArray[idxBitArray] &= this.upperMask
-      this.dataArray[idxBitArray] |= colorIdx
-    }
+    this.data.setPixel(idx, colorIdx)
 
     await db.set(x, y, colorIdx)
     await db.setUserActionTimestamp(userIP)

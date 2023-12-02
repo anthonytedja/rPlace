@@ -1,7 +1,7 @@
 .PHONY: run check build
 
 run: build
-	docker-compose up
+	docker-compose up -d
 
 build: check
 	docker-compose build

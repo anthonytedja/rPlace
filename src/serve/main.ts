@@ -1,10 +1,12 @@
 import path from 'path'
+import { DevCache } from '../api/cache/impl/dev-cache'
 import { DevDatabase } from '../api/database/impl/dev-database'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 
 const database = new DevDatabase()
-const ss = new SocketServer(database)
+const cache = new DevCache()
+const ss = new SocketServer(database, cache)
 
 ss.setup()
   .then(() => {

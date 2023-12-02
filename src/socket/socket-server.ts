@@ -1,17 +1,16 @@
 import WebSocket from 'ws'
 
+import { Database } from '../api/database/database'
 import { Cache } from '../api/cache/cache'
 import { Board } from '../domain/board'
 
 import { Connection } from './connection'
-import { Database } from '../api/database/database'
-import { DevCache } from '../api/cache/impl/dev-cache'
 import { UserHandler } from '../domain/user-handler'
 
 export class SocketServer {
   wss: WebSocket.Server
   database: Database
-  cache: Cache = new DevCache()
+  cache: Cache
   board: Board = new Board()
   userHandler: UserHandler
 
@@ -21,9 +20,10 @@ export class SocketServer {
     return this.cache.setBoard(this.board)
   }
 
-  constructor(database: Database) {
+  constructor(database: Database, cache: Cache) {
     this.wss = new WebSocket.Server({ port: 8081 })
     this.database = database
+    this.cache = cache
     this.userHandler = new UserHandler(this.database)
     this.setBindings()
   }

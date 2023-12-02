@@ -13,9 +13,9 @@ ss.setup()
     // Static content
     var express = require('express')
     var app = express()
-    var cors = require("cors")
+    //var cors = require("cors")
 
-    app.use(cors())
+    //app.use(cors())
 
     // static_files has all of statically returned content
     // https://expressjs.com/en/starter/static-files.html

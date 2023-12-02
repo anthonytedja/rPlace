@@ -6,8 +6,8 @@ export class DevDatabase implements Database {
   async createClient() {
     const cassandra = require('cassandra-driver')
     const client = new cassandra.Client({
-      contactPoints: ['cassandra'],
-      localDataCenter: 'datacenter1',
+      contactPoints: ['cassandra.us-east-1.amazonaws.com'],
+      localDataCenter: 'us-east-1',
       keyspace: 'r_place',
     })
     await client.connect()

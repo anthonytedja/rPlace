@@ -13,10 +13,14 @@ ss.setup()
     // Static content
     var express = require('express')
     var app = express()
+    var cors = require("cors")
+
+    app.use(cors())
 
     // static_files has all of statically returned content
     // https://expressjs.com/en/starter/static-files.html
     const publicPath = path.resolve(__dirname, '../../')
+    console.log(publicPath)
     app.use('/', express.static(publicPath)) // this directory has files to be returned
 
     // send the entire board in a bitmap representation

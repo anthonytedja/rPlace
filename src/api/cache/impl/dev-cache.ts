@@ -7,7 +7,7 @@ export class DevCache implements Cache {
   client = this.createClient()
 
   async createClient() {
-    const client = redisCreateClient({ url: 'redis://redis:6379' })
+    const client = redisCreateClient({ url: 'redis://csc409a3cache-fxt3pv.serverless.use1.cache.amazonaws.com:6379' }) // this is the prod url in the dev file, bad
     client.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
     await client.connect()
     return client

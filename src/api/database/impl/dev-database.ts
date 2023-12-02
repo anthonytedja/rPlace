@@ -5,9 +5,23 @@ export class DevDatabase implements Database {
 
   async createClient() {
     const cassandra = require('cassandra-driver')
+    const fs = require('fs')
+    const auth = new cassandra.auth.PlainTextAuthProvider(
+      'CassandraUser-at-320298637304',
+      'HaSMaR+okWD89RmTx+bZqcVnxAzXAD8z0Hox7JCm3Nk='
+    )
+    const sslOptions1 = {
+      ca: [fs.readFileSync('sf-class2-root.crt', 'utf-8')],
+      host: 'cassandra.us-east-1.amazonaws.com',
+      rejectUnauthorized: true,
+    }
+
     const client = new cassandra.Client({
-      contactPoints: ['cassandra'],
-      localDataCenter: 'datacenter1',
+      contactPoints: ['cassandra.us-east-1.amazonaws.com'],
+      localDataCenter: 'us-east-1',
+      authProvider: auth,
+      sslOptions: sslOptions1,
+      protocolOptions: { port: 9142 },
       keyspace: 'r_place',
     })
     await client.connect()

@@ -3,7 +3,11 @@ import WebSocket from 'ws'
 import { SocketServer } from './socket-server'
 
 export class Connection {
-  constructor(public websocket: WebSocket, public socketServer: SocketServer) {
+  constructor(
+    public remoteAddress: string,
+    public websocket: WebSocket,
+    public socketServer: SocketServer
+  ) {
     console.log('connection init')
     this.setBindings()
   }
@@ -46,7 +50,7 @@ async function onMessage(c: Connection) {
     if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
       console.log('valid set')
 
-      const canUpdate = await c.socketServer.userHandler.canUpdate()
+      const canUpdate = await c.socketServer.userHandler.canUpdate(c.remoteAddress)
       if (!canUpdate) {
         console.log('too soon')
         return
@@ -54,7 +58,7 @@ async function onMessage(c: Connection) {
 
       c.socketServer.broadcast(message)
       await c.socketServer.cache.set(x, y, colorIdx)
-      await c.socketServer.board.setPixel(x, y, colorIdx)
+      await c.socketServer.board.setPixel(x, y, colorIdx, c.remoteAddress)
     } else {
       console.log('invalid set')
     }

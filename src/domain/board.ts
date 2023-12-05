@@ -42,9 +42,7 @@ export class Board {
     )
   }
 
-  async setPixel(x: number, y: number, colorIdx: number) {
-    const userIP = await UserHandler.getIP()
-
+  async setPixel(x: number, y: number, colorIdx: number, userIP: string) {
     if (colorIdx > MAX_COLOR_INDEX) {
       throw new Error(`Invalid color: ${colorIdx}`)
     }

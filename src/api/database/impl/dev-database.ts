@@ -26,7 +26,6 @@ export class DevDatabase implements Database {
       sslOptions: sslOptions1,
       protocolOptions: { port: 9142 },
       keyspace: 'r_place',
-      queryOptions: { consistency: cassandra.types.consistencies.quorum },
     })
     await client.connect()
     return client
@@ -52,6 +51,8 @@ export class DevDatabase implements Database {
       'INSERT INTO r_place.color_mappings (x, y, color, timestamp) VALUES (?, ?, ?, toTimestamp(now()))'
     const client = await this.client
     await client.execute(query, [xPos, yPos, colorIdx], {
+      // Local Quorum
+      consistency: 6,
       prepare: true,
     })
   }
@@ -61,6 +62,8 @@ export class DevDatabase implements Database {
       'INSERT INTO r_place.timestamps (userIP, timestamp) VALUES (?, toTimestamp(now()))'
     const client = await this.client
     await client.execute(query, [userIP], {
+      // Local Quorum
+      consistency: 6,
       prepare: true,
     })
   }

@@ -52,8 +52,9 @@ function onClose(wss: SocketServer) {
 }
 
 function onConnection(wss: SocketServer) {
-  return (webSocket: WebSocket, request: Request) => {
-    const remoteAddress = request.headers.get('X-Forwarded-For') || "";
+  return (webSocket: WebSocket, request: any) => {
+    const remoteAddress = request.socket.remoteAddress || "";
+    console.log(`connection from ${remoteAddress}`)
     new Connection(remoteAddress, webSocket, wss)
   }
 }

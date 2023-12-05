@@ -9,8 +9,8 @@ export class UserHandler {
    * @returns true if the user can update the board (last update was > 5 minutes ago)
    */
   async canUpdate(userIP: string) {
-    const lastTimestamp = await this.database.getUserActionTimestamp(userIP)
     console.log("checking if", userIP, "can update")
+    const lastTimestamp = await this.database.getUserActionTimestamp(userIP)
     if (lastTimestamp === null) return true
     const now = new Date()
     const timeDiff = now.getTime() - lastTimestamp.getTime()

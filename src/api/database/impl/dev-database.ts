@@ -26,6 +26,7 @@ export class DevDatabase implements Database {
       sslOptions: sslOptions1,
       protocolOptions: { port: 9142 },
       keyspace: 'r_place',
+      queryOptions: { consistency: cassandra.types.consistencies.quorum },
     })
     await client.connect()
     return client

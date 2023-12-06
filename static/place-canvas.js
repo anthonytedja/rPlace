@@ -24,8 +24,8 @@ export default class PlaceCanvas {
 
     this.canvas.addEventListener('mousemove', (event) => {
       const rect = this.canvas.getBoundingClientRect()
-      const x = Math.min(Math.max(Math.round(event.clientX - rect.left), 0), 249)
-      const y = Math.min(Math.max(Math.round(event.clientY - rect.top), 0), 249)
+      const x = Math.min(Math.max(Math.round(event.clientX - rect.left), 0), 999)
+      const y = Math.min(Math.max(Math.round(event.clientY - rect.top), 0), 999)
 
       // Create tooltip element if it doesn't exist
       let tooltip = document.getElementById('tooltip')
@@ -37,8 +37,8 @@ export default class PlaceCanvas {
 
       // Update tooltip content and position
       tooltip.textContent = `x: ${x}, y: ${y}`
-      tooltip.style.left = `${event.pageX}px`
-      tooltip.style.top = `${event.pageY}px`
+      tooltip.style.left = `${event.pageX + 10}px`
+      tooltip.style.top = `${event.pageY - 10}px`
       tooltip.style.opacity = '1'
     })
   }

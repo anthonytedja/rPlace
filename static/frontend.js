@@ -5,7 +5,7 @@ import { buildUrl } from './url-builder.js'
 var socket
 
 $(function () {
-  let canvas = new PlaceCanvas(250, 250)
+  let canvas = new PlaceCanvas(1000, 1000)
 
   // socket = new WebSocket("ws://cslinux.utm.utoronto.ca:8001");
   // socket = new WebSocket("ws://localhost:8001");

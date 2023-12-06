@@ -20,6 +20,7 @@ export class DevCache implements Cache {
   }
 
   async set(xPos: number, yPos: number, colorIdx: number): Promise<void> {
+    console.log('setting', xPos, yPos, colorIdx)
     return this.client.then((cli) =>
       cli.sendCommand([
         'BITFIELD',

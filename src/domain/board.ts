@@ -6,7 +6,7 @@ import { BoardDataGrid } from './board-data-grid'
 const db = new DevDatabase()
 
 export class Board {
-  static size: number = 250
+  static size: number = 1000
 
   private data: BoardDataGrid
 

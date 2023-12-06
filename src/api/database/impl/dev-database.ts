@@ -8,23 +8,9 @@ export class DevDatabase implements Database {
 
   async createClient() {
     const cassandra = require('cassandra-driver')
-    const fs = require('fs')
-    const auth = new cassandra.auth.PlainTextAuthProvider(
-      'CassandraUser-at-320298637304',
-      'HaSMaR+okWD89RmTx+bZqcVnxAzXAD8z0Hox7JCm3Nk='
-    )
-    const sslOptions1 = {
-      ca: [fs.readFileSync('sf-class2-root.crt', 'utf-8')],
-      host: 'cassandra.us-east-1.amazonaws.com',
-      rejectUnauthorized: true,
-    }
-
     const client = new cassandra.Client({
-      contactPoints: ['cassandra.us-east-1.amazonaws.com'],
-      localDataCenter: 'us-east-1',
-      authProvider: auth,
-      sslOptions: sslOptions1,
-      protocolOptions: { port: 9142 },
+      contactPoints: ['cassandra'],
+      localDataCenter: 'datacenter1',
       keyspace: 'r_place',
     })
     await client.connect()
@@ -75,36 +61,3 @@ export class DevDatabase implements Database {
     return result.rows.length > 0 ? result.rows[0].timestamp : null
   }
 }
-
-/*
-async getBoard(): Promise<number[][]> {
-    const query = 'SELECT * FROM r_place.color_mappings'
-    const client = await this.client
-    const result = await client.execute(query)
-    console.log(result.rows)
-    const board = Array(250)
-      .fill(0)
-      .map(() => Array(250).fill(0))
-    result.rows.forEach((row: any) => {
-      board[row.x][row.y] = row.color
-    })
-    return board
-  }
-
-  private formatBoardData(board: number[][]): Uint8ClampedArray {
-    const data = new ArrayBuffer(Math.floor((250 * 250) / 2))
-    const dataArray = new Uint8ClampedArray(data)
-
-    for (let i = 0; i < 250; i++) {
-      for (let j = 0; j < 250; j++) {
-        const idx = i * 250 + j
-        const arrayIdx = Math.floor(idx / 2)
-        const colorIdx = board[i][j]
-        dataArray[arrayIdx] =
-          (dataArray[arrayIdx] & (idx % 2 === 0 ? 15 : 240)) | (colorIdx << ((idx % 2) * 4))
-      }
-    }
-
-    return dataArray
-  }
-*/

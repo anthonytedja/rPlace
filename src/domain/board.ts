@@ -2,7 +2,6 @@ import { DevDatabase } from '../api/database/impl/dev-database'
 import { MAX_COLOR_INDEX } from './color'
 import { DimensionConvert } from './dimension-convert'
 import { BoardDataGrid } from './board-data-grid'
-import { UserHandler } from '../domain/user-handler'
 
 const db = new DevDatabase()
 

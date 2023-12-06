@@ -7,9 +7,7 @@ export class DevCache implements Cache {
   client = this.createClient()
 
   async createClient() {
-    const client = redisCreateClient({
-      url: 'redis://someclustername.fxt3pv.ng.0001.use1.cache.amazonaws.com:6379',
-    }) // this is the prod url in the dev file, bad
+    const client = redisCreateClient({ url: 'redis://redis:6379' })
     client.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
     await client.connect()
     return client
@@ -37,5 +35,16 @@ export class DevCache implements Cache {
   async getBoard(): Promise<Board> {
     const data: string = (await this.client.then((cli) => cli.get('place_board'))) || ''
     return Promise.resolve(new Board(new Uint8ClampedArray(new TextEncoder().encode(data))))
+  }
+
+  async subscribe(
+    channel: string,
+    callback: (channel: string, message: string) => void
+  ): Promise<void> {
+    this.client.then((cli) => cli.subscribe(channel, callback))
+  }
+
+  async publish(channel: string, message: string): Promise<number> {
+    return this.client.then((cli) => cli.publish(channel, message))
   }
 }

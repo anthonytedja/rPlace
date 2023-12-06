@@ -1,6 +1,8 @@
 import path from 'path'
 import { DevCache } from '../api/cache/impl/dev-cache'
 import { DevDatabase } from '../api/database/impl/dev-database'
+import { AWSCache } from '../api/cache/impl/aws-cache'
+import { AWSDatabase } from '../api/database/impl/aws-database'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 

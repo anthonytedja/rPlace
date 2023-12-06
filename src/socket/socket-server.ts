@@ -26,7 +26,17 @@ export class SocketServer {
     this.cache = cache
     this.userHandler = new UserHandler(this.database)
     this.setBindings()
+    //this.setupPubSub()
   }
+
+  // setupPubSub() {
+  //   this.cache.subscribe('websocket-broadcast', (channel, message) => {
+  //     if (channel === 'websocket-broadcast') {
+  //       console.log('broadcasting', message)
+  //       this.broadcast(message)
+  //     }
+  //   })
+  // }
 
   async getBoard(): Promise<Board> {
     return this.cache.getBoard()
@@ -43,6 +53,7 @@ export class SocketServer {
         client.send(data)
       }
     })
+    //this.cache.publish('websocket-broadcast', data)
   }
 }
 
@@ -53,7 +64,7 @@ function onClose(wss: SocketServer) {
 
 function onConnection(wss: SocketServer) {
   return (webSocket: WebSocket, request: any) => {
-    const remoteAddress = request.socket.remoteAddress || "";
+    const remoteAddress = request.socket.remoteAddress || 'unknown'
     console.log(`connection from ${remoteAddress}`)
     new Connection(remoteAddress, webSocket, wss)
   }

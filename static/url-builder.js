@@ -1,4 +1,4 @@
-var domain = window.location.hostname
+var domain = window.location.host
 
 export function buildUrl(url) {
   //return window.location.protocol + `//${domain}` + url;

@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  RedisSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Security group for redis"
+      GroupName: "redis-security"
+      VpcId: !Ref VPC
+      SecurityGroupEgress: 
+        - CidrIp: "0.0.0.0/0"
+          IpProtocol: "-1"
+  
+  RedisSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      - GroupId: !Ref RedisSecurityGroup
+        SourceSecurityGroupId: !Ref EC2SecurityGroup
+        IpProtocol: "-1"
+      
+  EC2SecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Security group for ec2 instance"
+      GroupName: "ec2-security"
+      VpcId: !Ref VPC
+      SecurityGroupIngress: 
+        - 
+          CidrIp: "0.0.0.0/0"
+          Description: "http"
+          FromPort: 80
+          IpProtocol: "tcp"
+          ToPort: 80
+        - 
+          CidrIp: "0.0.0.0/0"
+          FromPort: 22
+          IpProtocol: "tcp"
+          ToPort: 22
+        - 
+          CidrIp: "0.0.0.0/0"
+          Description: "r/waste socket"
+          FromPort: 8081
+          IpProtocol: "tcp"
+          ToPort: 8081
+      SecurityGroupEgress: 
+        - 
+          CidrIp: "0.0.0.0/0"
+          IpProtocol: "-1"
+
+  EC2SecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      - GroupId: !Ref EC2SecurityGroup
+        SourceSecurityGroupId: !Ref RedisSecurityGroup
+        Description: "redis"
+        IpProtocol: "tcp"
+        FromPort: 6379
+        ToPort: 6379
+
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      LaunchTemplate: lt-02bdddec839ce70e3
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+
+  VPC:
+    Type: "AWS::EC2::VPC"
+
+
+# ec2 security group      DONE
+# elastic IP attach (probably not if elastic load balancer is going to be a thing)
+# redis security group    DONE
+# ec2 instance            DONE
+# elasticache
+# keyspaces
+# cloudfront distribution 
+# VPC
+# s3 bucket  

@@ -8,7 +8,7 @@ export class AWSCache implements Cache {
 
   async createClient() {
     const client = redisCreateClient({
-      url: 'redis://someclustername.fxt3pv.ng.0001.use1.cache.amazonaws.com:6379',
+      url: 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
     })
     client.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
     await client.connect()

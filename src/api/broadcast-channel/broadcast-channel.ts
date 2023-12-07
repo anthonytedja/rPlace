@@ -3,4 +3,3 @@ export interface BroadcastChannel {
   subscribeToChannel(listener: any): Promise<void>
   publishContent(data: any): Promise<void>
 }
-  

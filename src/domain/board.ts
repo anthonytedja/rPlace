@@ -1,9 +1,11 @@
 import { DevDatabase } from '../api/database/impl/dev-database'
+import { AWSDatabase } from '../api/database/impl/aws-database'
 import { MAX_COLOR_INDEX } from './color'
 import { DimensionConvert } from './dimension-convert'
 import { BoardDataGrid } from './board-data-grid'
 
-const db = new DevDatabase()
+//const db = new DevDatabase()
+const db = new AWSDatabase()
 
 export class Board {
   static size: number = 1000

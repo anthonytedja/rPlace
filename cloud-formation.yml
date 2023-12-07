@@ -1,26 +1,55 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Resources:
+  VPCInternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+
+  VPCRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    DependsOn: VPC
+    Properties:
+      VpcId: !Ref VPC
+
+  VPCRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn:
+     - VPCRouteTable
+     - VPCInternetGateway
+    Properties:
+      GatewayId: !Ref VPCInternetGateway
+      RouteTableId: !Ref VPCRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+
   VPC:
     Type: "AWS::EC2::VPC"
     Properties:
       CidrBlock: "172.31.0.0/16"
-  
-  VPCRedisSubnet:
+
+  VPCGatewayAttachment:
+    DependsOn:
+      - VPC
+      - VPCInternetGateway
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      InternetGatewayId: !Ref VPCInternetGateway
+      VpcId: !Ref VPC
+
+  VPCSubnet:
     Type: "AWS::EC2::Subnet"
     DependsOn: RedisSecurityGroup
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: "us-east-1a"
       CidrBlock: "172.31.32.0/20"
-  
-  # EC2RedisSubnet:
-  #   Type: "AWS::EC2::Subnet"
-  #   DependsOn: EC2SecurityGroup
-  #   Properties:
-  #     VpcId: !Ref VPC
-  #     AvailabilityZone: "us-east-1a"
-  #     CidrBlock: "172.31.32.0/20"
+
+  VPCSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    DependsOn:
+      - VPCRouteTable
+      - VPCSubnet
+    Properties:
+      RouteTableId: !Ref VPCRouteTable
+      SubnetId: !Ref VPCSubnet
 
   RedisSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
@@ -80,7 +109,7 @@ Resources:
 
   EC2LaunchTemplate:
     Type: 'AWS::EC2::LaunchTemplate'
-    DependsOn: VPCRedisSubnet
+    DependsOn: VPCSubnet
     Properties:
       LaunchTemplateName: "EC2LaunchTemplate"
       LaunchTemplateData: 
@@ -90,9 +119,9 @@ Resources:
           NetworkInterfaces:
             - AssociatePublicIpAddress: "True"
               DeviceIndex: 0
-              SubnetId: !Ref VPCRedisSubnet
+              SubnetId: !Ref VPCSubnet
               Groups: 
-                -  !Ref EC2SecurityGroup
+                - !Ref EC2SecurityGroup
 
   EC2Instance:
     Type: 'AWS::EC2::Instance'
@@ -104,26 +133,26 @@ Resources:
   
   ElastiCacheSubnetGroup:
     Type: "AWS::ElastiCache::SubnetGroup"
-    DependsOn: VPCRedisSubnet
+    DependsOn: VPCSubnet
     Properties:
       CacheSubnetGroupName: "cache-subnet"
       Description: "subnet for cache"
       SubnetIds:
-        - !Ref VPCRedisSubnet
+        - !Ref VPCSubnet
 
-  # ElastiCache:
-  #   Type: "AWS::ElastiCache::CacheCluster"
-  #   DependsOn: ElastiCacheSubnetGroup
-  #   Properties:
-  #     CacheNodeType: "cache.t3.micro"
-  #     Engine: "redis"
-  #     EngineVersion: "7.1"
-  #     NumCacheNodes: 1
-  #     CacheParameterGroupName: "default.redis7"
-  #     CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
-  #     VpcSecurityGroupIds:
-  #       - !Ref RedisSecurityGroup
-  #     ClusterName: "somecache-002"
+  ElastiCache:
+    Type: "AWS::ElastiCache::CacheCluster"
+    DependsOn: ElastiCacheSubnetGroup
+    Properties:
+      CacheNodeType: "cache.t3.micro"
+      Engine: "redis"
+      EngineVersion: "7.1"
+      NumCacheNodes: 1
+      CacheParameterGroupName: "default.redis7"
+      CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref RedisSecurityGroup
+      ClusterName: "somecache-002"
   
   KeySpace:
     Type: "AWS::Cassandra::Keyspace"

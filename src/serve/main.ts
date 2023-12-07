@@ -3,14 +3,17 @@ import { DevCache } from '../api/cache/impl/dev-cache'
 import { DevDatabase } from '../api/database/impl/dev-database'
 import { AWSCache } from '../api/cache/impl/aws-cache'
 import { AWSDatabase } from '../api/database/impl/aws-database'
+import { DevBroadcastChannel } from '../api/broadcast-channel/impl/dev-channel'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 
 const database = new DevDatabase()
 const cache = new DevCache()
-const ss = new SocketServer(database, cache)
+const broadcastChannel = new DevBroadcastChannel()
+const ss = new SocketServer(database, cache, broadcastChannel)
 
 ss.setup()
+  .then(() => ss.establishBroadcastChannel())
   .then(() => {
     var express = require('express')
     var app = express()

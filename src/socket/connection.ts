@@ -40,28 +40,9 @@ async function onMessage(c: Connection) {
   return async (message: string) => {
     console.log('raw message:', message)
 
-    var data = JSON.parse(message)
-    const [x, y, colorIdx] = [data.x, data.y, data.color]
-    if (x == undefined || y == undefined || colorIdx == undefined) {
-      console.log(`garbage data from connection: ${message}`)
-    }
-    console.log('message: ', x, y, colorIdx)
-
-    if (c.socketServer.board.isValidSet(x, y, colorIdx)) {
-      console.log('valid set')
-
-      const canUpdate = await c.socketServer.userHandler.canUpdate(c.remoteAddress)
-      if (!canUpdate) {
-        console.log('too soon')
-        return
-      }
-
-      c.socketServer.broadcast(message)
-      await c.socketServer.cache.set(x, y, colorIdx)
-      await c.socketServer.board.setPixel(x, y, colorIdx, c.remoteAddress)
-    } else {
-      console.log('invalid set')
-    }
+    let data = JSON.parse(message)
+    data["user"] = c.remoteAddress
+    await c.socketServer.broadcastChannel.publishContent(data)
   }
 }
 

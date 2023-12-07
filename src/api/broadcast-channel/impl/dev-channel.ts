@@ -6,14 +6,10 @@ export class DevBroadcastChannel implements BroadcastChannel {
   publisher: any
 
   async init(): Promise<void> {
-    this.subscriber = redisCreateClient({
-      url: 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
-    })
+    this.subscriber = redisCreateClient({ url: 'redis://redis:6379' })
     this.subscriber.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
 
-    this.publisher = redisCreateClient({
-      url: 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
-    })
+    this.publisher = redisCreateClient({ url: 'redis://redis:6379' })
     this.publisher.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
 
     return this.subscriber.connect().then(() => this.publisher.connect())

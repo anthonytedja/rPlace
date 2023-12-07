@@ -13,6 +13,14 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: "us-east-1a"
       CidrBlock: "172.31.32.0/20"
+  
+  # EC2RedisSubnet:
+  #   Type: "AWS::EC2::Subnet"
+  #   DependsOn: EC2SecurityGroup
+  #   Properties:
+  #     VpcId: !Ref VPC
+  #     AvailabilityZone: "us-east-1a"
+  #     CidrBlock: "172.31.32.0/20"
 
   RedisSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
@@ -72,17 +80,19 @@ Resources:
 
   EC2LaunchTemplate:
     Type: 'AWS::EC2::LaunchTemplate'
-    DependsOn: EC2SecurityGroup
+    DependsOn: VPCRedisSubnet
     Properties:
       LaunchTemplateName: "EC2LaunchTemplate"
       LaunchTemplateData: 
           KeyName: "csc409a3ec2"
-          NetworkInterfaces: 
-            - DeviceIndex: 0
-              Groups: 
-                - !Ref EC2SecurityGroup
           ImageId: "ami-0d5409252f976c841"
           InstanceType: "t2.small"
+          NetworkInterfaces:
+            - AssociatePublicIpAddress: "True"
+              DeviceIndex: 0
+              SubnetId: !Ref VPCRedisSubnet
+              Groups: 
+                -  !Ref EC2SecurityGroup
 
   EC2Instance:
     Type: 'AWS::EC2::Instance'
@@ -101,19 +111,19 @@ Resources:
       SubnetIds:
         - !Ref VPCRedisSubnet
 
-  ElastiCache:
-    Type: "AWS::ElastiCache::CacheCluster"
-    DependsOn: ElastiCacheSubnetGroup
-    Properties:
-      CacheNodeType: "cache.t3.micro"
-      Engine: "redis"
-      EngineVersion: "7.1"
-      NumCacheNodes: 1
-      CacheParameterGroupName: "default.redis7"
-      CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
-      VpcSecurityGroupIds:
-        - !Ref RedisSecurityGroup
-      ClusterName: "somecache-002"
+  # ElastiCache:
+  #   Type: "AWS::ElastiCache::CacheCluster"
+  #   DependsOn: ElastiCacheSubnetGroup
+  #   Properties:
+  #     CacheNodeType: "cache.t3.micro"
+  #     Engine: "redis"
+  #     EngineVersion: "7.1"
+  #     NumCacheNodes: 1
+  #     CacheParameterGroupName: "default.redis7"
+  #     CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
+  #     VpcSecurityGroupIds:
+  #       - !Ref RedisSecurityGroup
+  #     ClusterName: "somecache-002"
   
   KeySpace:
     Type: "AWS::Cassandra::Keyspace"

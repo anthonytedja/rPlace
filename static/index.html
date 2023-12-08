@@ -5,6 +5,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/anthonytedja/anthonytedja.github.io/main/assets/img/cat.gif"
+    />
 
     <title>r/Place clone</title>
 
@@ -12,16 +16,29 @@
     <script type="module" src="frontend.js"></script>
     <style>
       body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        min-height: 95vh;
         text-align: center;
-        overflow: hidden;
-        margin: 0px;
-        padding: 0px;
       }
       canvas {
-        border: 1px solid black;
+        border: 1px dashed black;
       }
-      input[type='number'] {
-        width: 3em;
+      form {
+        display: flex;
+        gap: 1rem;
+        width: 1000px;
+      }
+      p {
+        width: 1000px;
+      }
+      form > * {
+        flex: 1;
+        text-align: center;
+        padding: 1rem;
       }
       #tooltip {
         position: absolute;
@@ -36,32 +53,35 @@
     </style>
   </head>
   <body>
-    <h1>r/place clone</h1>
-
-    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <div>
+      <canvas id="canvas" width="1000" height="1000"></canvas>
+    </div>
+    <p>
+      Hover over the canvas to see the coordinate positioning and click to set the input values.
+      r/Place allows you to place a pixel every 5 minutes.
+    </p>
     <form id="setForm">
-      (<input type="number" id="x" placeholder="x" min="0" max="999" />,
-      <input type="number" id="y" placeholder="y" min="0" max="999" />) &nbsp; &nbsp; &nbsp;
+      <input type="number" id="x" placeholder="X Coordinate (0 to 999)" min="0" max="999" />
+      <input type="number" id="y" placeholder="Y Coordinate (0 to 999)" min="0" max="999" />
       <select id="color">
-        <option value="0">white</option>
-        <option value="1">light grey</option>
-        <option value="2">grey</option>
-        <option value="3">black</option>
-        <option value="4">pink</option>
-        <option value="5">red</option>
-        <option value="6">orange</option>
-        <option value="7">brown</option>
-        <option value="8">yellow</option>
-        <option value="9">lime</option>
-        <option value="10">green</option>
-        <option value="11">cyan</option>
-        <option value="12">blue</option>
-        <option value="13">dark blue</option>
-        <option value="14">magenta</option>
-        <option value="15">purple</option>
+        <option value="0">White</option>
+        <option value="1">Light Gray</option>
+        <option value="2">Gray</option>
+        <option value="3" selected="selected">Black</option>
+        <option value="4">Pink</option>
+        <option value="5">Red</option>
+        <option value="6">Orange</option>
+        <option value="7">Brown</option>
+        <option value="8">Yellow</option>
+        <option value="9">Lime</option>
+        <option value="10">Green</option>
+        <option value="11">Cyan</option>
+        <option value="12">Blue</option>
+        <option value="13">Dark Blue</option>
+        <option value="14">Magenta</option>
+        <option value="15">Purple</option>
       </select>
-      &nbsp; &nbsp; &nbsp;
-      <input type="submit" name="set" value="set" />
+      <input type="submit" name="set" value="Submit" />
     </form>
   </body>
 </html>

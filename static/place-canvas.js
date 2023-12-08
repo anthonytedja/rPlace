@@ -41,6 +41,15 @@ export default class PlaceCanvas {
       tooltip.style.top = `${event.pageY - 10}px`
       tooltip.style.opacity = '1'
     })
+
+    this.canvas.addEventListener('click', (event) => {
+      const rect = this.canvas.getBoundingClientRect()
+      const x = Math.min(Math.max(Math.round(event.clientX - rect.left), 0), 999)
+      const y = Math.min(Math.max(Math.round(event.clientY - rect.top), 0), 999)
+
+      $('#x').val(x)
+      $('#y').val(y)
+    })
   }
 
   /**

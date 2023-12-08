@@ -6,16 +6,10 @@ var socket
 
 $(function () {
   let canvas = new PlaceCanvas(1000, 1000)
-
-  // socket = new WebSocket("ws://cslinux.utm.utoronto.ca:8001");
-  // socket = new WebSocket("ws://localhost:8001");
-  socket = new WebSocket('ws://' + window.location.hostname + ':8081')
+  socket = new WebSocket(`ws://${window.location.hostname}:8081`)
   socket.onopen = function () {
     $('#sendButton').removeAttr('disabled')
-    console.log('connected')
 
-    // retrieve entire board
-    console.log('requesting board from server')
     fetch(buildUrl('/api/board-bitmap'))
       .then((res) => res.arrayBuffer())
       .then((res) => {
@@ -31,7 +25,7 @@ $(function () {
     var o = JSON.parse(event.data)
 
     canvas.setColor(o.x, o.y, o.color)
-    canvas.displayBufferedDraws() // TODO: see below
+    canvas.displayBufferedDraws()
 
     /* TODO: for pixel updates
        periodically call displayBufferedDraws if buffer is dirty

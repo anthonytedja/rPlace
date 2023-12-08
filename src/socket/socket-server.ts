@@ -40,21 +40,18 @@ export class SocketServer {
   }
 
   async handleUpdateFromClient(message: any, channel: any) {
-    console.log(message, channel)
+    console.log(`\nMessage: ${message} from Channel: ${channel}`)
 
     var data = JSON.parse(message)
     const [x, y, colorIdx, user] = [data.x, data.y, data.color, data.user]
     if (x == undefined || y == undefined || colorIdx == undefined || user == undefined) {
-      console.log(`garbage data from connection: ${message}`)
+      console.log(`Bad Request: ${message}`)
     }
-    console.log('message: ', x, y, colorIdx, user)
 
     if (this.board.isValidSet(x, y, colorIdx)) {
-      console.log('valid set')
-
       const canUpdate = await this.userHandler.canUpdate(user)
       if (!canUpdate) {
-        console.log('too soon')
+        console.log(`User ${user} cannot update the board yet`)
         return
       }
 
@@ -64,7 +61,7 @@ export class SocketServer {
       await this.database.set(x, y, colorIdx)
       await this.database.setUserActionTimestamp(user)
     } else {
-      console.log('invalid set')
+      console.log(`Bad Request: ${message}`)
     }
   }
 
@@ -94,7 +91,7 @@ function onClose(wss: SocketServer) {
 function onConnection(wss: SocketServer) {
   return (webSocket: WebSocket, request: any) => {
     const remoteAddress = request.socket.remoteAddress || 'unknown'
-    console.log(`connection from ${remoteAddress}`)
+    console.log(`Incoming connection from IPv6: ${remoteAddress}`)
     new Connection(remoteAddress, webSocket, wss)
   }
 }

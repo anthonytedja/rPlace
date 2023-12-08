@@ -50,6 +50,6 @@ export class Board {
     let idx = DimensionConvert.PosToCell(x, y)
     this.data.setPixel(idx, colorIdx)
 
-    console.log(`SET: ${x} ${y} ${colorIdx}`)
+    console.log(`Cache Set: ${x} ${y} ${colorIdx}`)
   }
 }

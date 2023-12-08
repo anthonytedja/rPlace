@@ -6,8 +6,6 @@ import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 import { publicIpv4 } from 'public-ip'
 
-console.log(process.env)
-
 const ss = new SocketServer(new Database(), new Cache(), new BroadcastChannel())
 
 ss.setup()
@@ -23,7 +21,6 @@ ss.setup()
 
     // send the entire board in a bitmap representation
     app.get('/api/board-bitmap', async (req: Request, res: Response) => {
-      console.log('sending board')
       const buffer = (await ss.getBoard()).getData()
       res.send(Buffer.from(buffer))
     })

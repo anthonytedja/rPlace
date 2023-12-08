@@ -12,7 +12,7 @@ export class Cache implements ICache {
           ? 'redis://redis:6379'
           : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
     })
-    client.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
+    client.on('error', (err: string) => console.log('Redis Client Error:', err))
     await client.connect()
     return client
   }
@@ -24,7 +24,7 @@ export class Cache implements ICache {
   }
 
   async set(xPos: number, yPos: number, colorIdx: number): Promise<void> {
-    console.log('setting', xPos, yPos, colorIdx)
+    console.log('Setting Pixel:', xPos, yPos, colorIdx)
     return this.client.then((cli) =>
       cli.sendCommand([
         'BITFIELD',

@@ -8,7 +8,6 @@ export class Connection {
     public websocket: WebSocket,
     public socketServer: SocketServer
   ) {
-    console.log('connection init')
     this.setBindings()
   }
 
@@ -38,10 +37,8 @@ function checkPing(c: Connection) {
 
 async function onMessage(c: Connection) {
   return async (message: string) => {
-    console.log('raw message:', message)
-
     let data = JSON.parse(message)
-    data["user"] = c.remoteAddress
+    data['user'] = c.remoteAddress
     await c.socketServer.broadcastChannel.publishContent(data)
   }
 }

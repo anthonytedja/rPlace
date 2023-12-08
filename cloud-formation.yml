@@ -203,7 +203,7 @@ Resources:
       Bucket: !Ref S3Bucket
       PolicyDocument:
         Statement:
-          - Sid: PublicReadGetObject
+          - Sid: AllowPublicAccessToBucket
             Effect: Allow
             Principal: '*'
             Action:
@@ -224,14 +224,16 @@ Resources:
           AllowedMethods:
             - 'GET'
             - 'HEAD'
-            - 'OPTIONS'
           TargetOriginId: 'S3Origin'
           ForwardedValues:
             QueryString: 'false'
             Cookies:
               Forward: 'none'
+          ViewerProtocolPolicy: 'allow-all'
+          CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6'
         DefaultRootObject: 'index.html'
-        ViewerProtocolPolicy: 'redirect-to-https'
+        PriceClass: 'PriceClass_100'
+        HttpVersion: 'http2'
 # ec2 security group      DONE
 # elastic IP attach (probably not if elastic load balancer is going to be a thing)
 # redis security group    DONE

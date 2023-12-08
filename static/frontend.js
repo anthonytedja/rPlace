@@ -1,12 +1,13 @@
 //frontend.js
 import PlaceCanvas from './place-canvas.js'
-import { buildUrl } from './url-builder.js'
+import { socketUrl, buildUrl } from './url-builder.js'
 
 var socket
 
-$(function () {
+$(async function () {
   let canvas = new PlaceCanvas(1000, 1000)
-  socket = new WebSocket(`ws://${window.location.hostname}:8081`)
+
+  socket = new WebSocket(`ws://${socketUrl}:8081`)
   socket.onopen = function () {
     $('#sendButton').removeAttr('disabled')
 

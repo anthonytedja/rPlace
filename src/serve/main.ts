@@ -27,6 +27,12 @@ ss.setup()
       res.send(Buffer.from(buffer))
     })
 
+    // return the server IP
+    app.get('/api/get-server', async (req: Request, res: Response) => {
+      // TODO: get actual IP of EC2 instance
+      res.send('18.232.68.248')
+    })
+
     app.listen(8080, function () {
       console.log('Listening on port 8080!')
     })

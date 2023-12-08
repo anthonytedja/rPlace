@@ -7,7 +7,7 @@ var socket
 $(async function () {
   let canvas = new PlaceCanvas(1000, 1000)
 
-  socket = new WebSocket(`ws://${socketUrl}:8081`)
+  socket = new WebSocket(`ws://${await socketUrl}:8081`)
   socket.onopen = function () {
     $('#sendButton').removeAttr('disabled')
 

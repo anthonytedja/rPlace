@@ -4,6 +4,7 @@ import { Cache } from '../api/cache'
 import { BroadcastChannel } from '../api/broadcast-channel'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
+import { publicIpv4 } from 'public-ip'
 
 console.log(process.env)
 
@@ -30,7 +31,8 @@ ss.setup()
     // return the server IP
     app.get('/api/get-server', async (req: Request, res: Response) => {
       // TODO: get actual IP of EC2 instance
-      res.send('18.232.68.248')
+      console.log(await publicIpv4())
+      res.send(await publicIpv4())
     })
 
     app.listen(8080, function () {

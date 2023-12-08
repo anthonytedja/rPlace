@@ -6,7 +6,7 @@ process_count=$(ps aux | grep "node dist/serve/main.js" | wc -l)
 
 if [ $process_count -eq 1 ]; then
   echo "running app"
-  (cd /home/ec2-user/csc409a3; node dist/serve/main.js)
+  (cd /home/ec2-user/csc409a3; ~/.nvm/versions/node/v18.13.0/bin/node dist/serve/main.js &)
 else
   echo "app is already running"
 fi

@@ -25,7 +25,7 @@ export class DevDatabase implements Database {
     const data = new BoardDataGrid(Board.size, Board.size)
 
     result.rows.forEach((row: any) => {
-      const idx = DimensionConvert.PosToCell(row.x, row.y)
+      const idx = DimensionConvert.PosToCell(row.coordinateX, row.coordinateY)
       data.setPixel(idx, row.color)
     })
 
@@ -34,7 +34,7 @@ export class DevDatabase implements Database {
 
   async set(xPos: number, yPos: number, colorIdx: number) {
     const query =
-      'INSERT INTO r_place.color_mappings (x, y, color, timestamp) VALUES (?, ?, ?, toTimestamp(now()))'
+      'INSERT INTO r_place.color_mappings (coordinateX, coordinateY, color, timestamp) VALUES (?, ?, ?, toTimestamp(now()))'
     const client = await this.client
     await client.execute(query, [xPos, yPos, colorIdx], {
       // Local Quorum

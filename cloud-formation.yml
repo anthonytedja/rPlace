@@ -2,48 +2,48 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Resources:
   VPCInternetGateway:
-    Type: "AWS::EC2::InternetGateway"
+    Type: 'AWS::EC2::InternetGateway'
 
   VPCRouteTable:
-    Type: "AWS::EC2::RouteTable"
+    Type: 'AWS::EC2::RouteTable'
     DependsOn: VPC
     Properties:
       VpcId: !Ref VPC
 
   VPCRoute:
-    Type: "AWS::EC2::Route"
+    Type: 'AWS::EC2::Route'
     DependsOn:
-     - VPCRouteTable
-     - VPCInternetGateway
+      - VPCRouteTable
+      - VPCInternetGateway
     Properties:
       GatewayId: !Ref VPCInternetGateway
       RouteTableId: !Ref VPCRouteTable
-      DestinationCidrBlock: "0.0.0.0/0"
+      DestinationCidrBlock: '0.0.0.0/0'
 
   VPC:
-    Type: "AWS::EC2::VPC"
+    Type: 'AWS::EC2::VPC'
     Properties:
-      CidrBlock: "172.31.0.0/16"
+      CidrBlock: '172.31.0.0/16'
 
   VPCGatewayAttachment:
     DependsOn:
       - VPC
       - VPCInternetGateway
-    Type: "AWS::EC2::VPCGatewayAttachment"
+    Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       InternetGatewayId: !Ref VPCInternetGateway
       VpcId: !Ref VPC
 
   VPCSubnet:
-    Type: "AWS::EC2::Subnet"
+    Type: 'AWS::EC2::Subnet'
     DependsOn: RedisSecurityGroup
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: "us-east-1a"
-      CidrBlock: "172.31.32.0/20"
+      AvailabilityZone: 'us-east-1a'
+      CidrBlock: '172.31.32.0/20'
 
   VPCSubnetRouteTableAssociation:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
     DependsOn:
       - VPCRouteTable
       - VPCSubnet
@@ -52,58 +52,58 @@ Resources:
       SubnetId: !Ref VPCSubnet
 
   RedisSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: 'AWS::EC2::SecurityGroup'
     DependsOn: VPC
     Properties:
-      GroupDescription: "Security group for redis"
-      GroupName: "redis-security"
+      GroupDescription: 'Security group for redis'
+      GroupName: 'redis-security'
       VpcId: !Ref VPC
-      SecurityGroupEgress: 
-        - CidrIp: "0.0.0.0/0"
-          IpProtocol: "-1"
-  
+      SecurityGroupEgress:
+        - CidrIp: '0.0.0.0/0'
+          IpProtocol: '-1'
+
   RedisSecurityGroupIngress:
-    Type: "AWS::EC2::SecurityGroupIngress"
+    Type: 'AWS::EC2::SecurityGroupIngress'
     DependsOn: RedisSecurityGroup
     Properties:
       GroupId: !Ref RedisSecurityGroup
       SourceSecurityGroupId: !Ref EC2SecurityGroup
-      IpProtocol: "-1"
-      
+      IpProtocol: '-1'
+
   EC2SecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: 'AWS::EC2::SecurityGroup'
     DependsOn: VPC
     Properties:
-      GroupDescription: "Security group for ec2 instance"
-      GroupName: "ec2-security"
+      GroupDescription: 'Security group for ec2 instance'
+      GroupName: 'ec2-security'
       VpcId: !Ref VPC
-      SecurityGroupIngress: 
-        - CidrIp: "0.0.0.0/0"
-          Description: "http"
+      SecurityGroupIngress:
+        - CidrIp: '0.0.0.0/0'
+          Description: 'http'
           FromPort: 80
-          IpProtocol: "tcp"
+          IpProtocol: 'tcp'
           ToPort: 80
-        - CidrIp: "0.0.0.0/0"
+        - CidrIp: '0.0.0.0/0'
           FromPort: 22
-          IpProtocol: "tcp"
+          IpProtocol: 'tcp'
           ToPort: 22
-        - CidrIp: "0.0.0.0/0"
-          Description: "r/waste socket"
+        - CidrIp: '0.0.0.0/0'
+          Description: 'r/waste socket'
           FromPort: 8081
-          IpProtocol: "tcp"
+          IpProtocol: 'tcp'
           ToPort: 8081
-      SecurityGroupEgress: 
-        - CidrIp: "0.0.0.0/0"
-          IpProtocol: "-1"
+      SecurityGroupEgress:
+        - CidrIp: '0.0.0.0/0'
+          IpProtocol: '-1'
 
   EC2SecurityGroupIngress:
-    Type: "AWS::EC2::SecurityGroupIngress"
+    Type: 'AWS::EC2::SecurityGroupIngress'
     DependsOn: EC2SecurityGroup
     Properties:
       GroupId: !Ref EC2SecurityGroup
       SourceSecurityGroupId: !Ref RedisSecurityGroup
-      Description: "redis"
-      IpProtocol: "tcp"
+      Description: 'redis'
+      IpProtocol: 'tcp'
       FromPort: 6379
       ToPort: 6379
 
@@ -111,17 +111,17 @@ Resources:
     Type: 'AWS::EC2::LaunchTemplate'
     DependsOn: VPCSubnet
     Properties:
-      LaunchTemplateName: "EC2LaunchTemplate"
-      LaunchTemplateData: 
-          KeyName: "csc409a3ec2"
-          ImageId: "ami-0d5409252f976c841"
-          InstanceType: "t2.small"
-          NetworkInterfaces:
-            - AssociatePublicIpAddress: "True"
-              DeviceIndex: 0
-              SubnetId: !Ref VPCSubnet
-              Groups: 
-                - !Ref EC2SecurityGroup
+      LaunchTemplateName: 'EC2LaunchTemplate'
+      LaunchTemplateData:
+        KeyName: 'csc409a3ec2'
+        ImageId: 'ami-0d5409252f976c841'
+        InstanceType: 't2.small'
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: 'True'
+            DeviceIndex: 0
+            SubnetId: !Ref VPCSubnet
+            Groups:
+              - !Ref EC2SecurityGroup
 
   EC2Instance:
     Type: 'AWS::EC2::Instance'
@@ -129,37 +129,109 @@ Resources:
     Properties:
       LaunchTemplate:
         LaunchTemplateId: !Ref EC2LaunchTemplate
-        Version: "1"
-  
+        Version: '1'
+
   ElastiCacheSubnetGroup:
-    Type: "AWS::ElastiCache::SubnetGroup"
+    Type: 'AWS::ElastiCache::SubnetGroup'
     DependsOn: VPCSubnet
     Properties:
-      CacheSubnetGroupName: "cache-subnet"
-      Description: "subnet for cache"
+      CacheSubnetGroupName: 'cache-subnet'
+      Description: 'subnet for cache'
       SubnetIds:
         - !Ref VPCSubnet
 
   ElastiCache:
-    Type: "AWS::ElastiCache::CacheCluster"
+    Type: 'AWS::ElastiCache::CacheCluster'
     DependsOn: ElastiCacheSubnetGroup
     Properties:
-      CacheNodeType: "cache.t3.micro"
-      Engine: "redis"
-      EngineVersion: "7.1"
+      CacheNodeType: 'cache.t3.micro'
+      Engine: 'redis'
+      EngineVersion: '7.1'
       NumCacheNodes: 1
-      CacheParameterGroupName: "default.redis7"
+      CacheParameterGroupName: 'default.redis7'
       CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
       VpcSecurityGroupIds:
         - !Ref RedisSecurityGroup
-      ClusterName: "somecache-002"
-  
+      ClusterName: 'somecache-002'
+
   KeySpace:
-    Type: "AWS::Cassandra::Keyspace"
+    Type: 'AWS::Cassandra::Keyspace'
     Properties:
-      KeyspaceName: "r_place"
+      KeyspaceName: 'r_place'
 
+  ColorMappingsTable:
+    Type: 'AWS::Cassandra::Table'
+    Properties:
+      TableName: 'color_mappings'
+      KeyspaceName: !Ref KeySpace
+      PartitionKeyColumns:
+        - ColumnName: 'coordinateX'
+          ColumnType: 'int'
+        - ColumnName: 'coordinateY'
+          ColumnType: 'int'
+      RegularColumns:
+        - ColumnName: 'color'
+          ColumnType: 'int'
+        - ColumnName: 'timestamp'
+          ColumnType: 'timestamp'
 
+  TimestampsTable:
+    Type: 'AWS::Cassandra::Table'
+    Properties:
+      TableName: 'timestamps'
+      KeyspaceName: !Ref KeySpace
+      PartitionKeyColumns:
+        - ColumnName: 'userIP'
+          ColumnType: 'text'
+      RegularColumns:
+        - ColumnName: 'timestamp'
+          ColumnType: 'timestamp'
+
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: 'csc409a3bucket'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  S3BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action:
+              - s3:GetObject
+            Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+
+  Cloudfront:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt S3Bucket.DomainName
+            Id: 'S3Origin'
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - 'GET'
+            - 'HEAD'
+            - 'OPTIONS'
+          TargetOriginId: 'S3Origin'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: 'none'
+        DefaultRootObject: 'index.html'
+        ViewerProtocolPolicy: 'redirect-to-https'
 # ec2 security group      DONE
 # elastic IP attach (probably not if elastic load balancer is going to be a thing)
 # redis security group    DONE
@@ -167,5 +239,5 @@ Resources:
 # elasticache             DONE
 # keyspaces               DONE
 # VPC                     DONE
-# cloudfront distribution 
-# s3 bucket  
+# cloudfront distribution NOT DONE
+# s3 bucket               DONE

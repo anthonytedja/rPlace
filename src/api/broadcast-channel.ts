@@ -12,7 +12,7 @@ export class BroadcastChannel implements IBroadcastChannel {
           ? 'redis://redis:6379'
           : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
     })
-    this.subscriber.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
+    this.subscriber.on('error', (err: string) => console.log('Redis Client Error:', err))
 
     this.publisher = createClient({
       url:
@@ -20,7 +20,7 @@ export class BroadcastChannel implements IBroadcastChannel {
           ? 'redis://redis:6379'
           : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
     })
-    this.publisher.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
+    this.publisher.on('error', (err: string) => console.log('Redis Client Error:', err))
 
     return this.subscriber.connect().then(() => this.publisher.connect())
   }

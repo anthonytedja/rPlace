@@ -24,6 +24,7 @@
     "express": "^4.16.4",
     "JSON": "^1.0.0",
     "path": "^0.12.7",
+    "public-ip": "npm:@esm2cjs/public-ip@^6.0.1",
     "redis": "^4.6.11",
     "typescript": "^5.3.2",
     "ws": "^6.2.2"

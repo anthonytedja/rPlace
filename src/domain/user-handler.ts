@@ -9,17 +9,16 @@ export class UserHandler {
    * @returns true if the user can update the board (last update was > 5 minutes ago)
    */
   async canUpdate(userIP: string) {
-    console.log('checking if', userIP, 'can update')
+    console.log('Checking rate limit for', userIP)
     const lastTimestamp = await this.database.getUserActionTimestamp(userIP)
     if (lastTimestamp === null) return true
     const now = new Date()
     const timeDiff = now.getTime() - lastTimestamp.getTime()
-    console.log(`timeDiff: ${timeDiff}`)
-    // 5 minutes
-    if (timeDiff <= UserHandler.rateLimit) {
-      // throw new Error(`Too soon for user IP ${userIP}: ${timeDiff} should be > 300000`)
-      return false
-    }
-    return true
+
+    const minutes = Math.floor(timeDiff / 60000)
+    const seconds = ((timeDiff % 60000) / 1000).toFixed(0)
+
+    console.log(`Time diff for ${userIP}: ${minutes} minutes & ${seconds} seconds`)
+    return timeDiff > UserHandler.rateLimit
   }
 }

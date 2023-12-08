@@ -4,8 +4,7 @@ import { Cache } from '../api/cache'
 import { BroadcastChannel } from '../api/broadcast-channel'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
-
-console.log(process.env)
+import { publicIpv4 } from 'public-ip'
 
 const ss = new SocketServer(new Database(), new Cache(), new BroadcastChannel())
 
@@ -22,7 +21,6 @@ ss.setup()
 
     // send the entire board in a bitmap representation
     app.get('/api/board-bitmap', async (req: Request, res: Response) => {
-      console.log('sending board')
       const buffer = (await ss.getBoard()).getData()
       res.send(Buffer.from(buffer))
     })
@@ -30,7 +28,8 @@ ss.setup()
     // return the server IP
     app.get('/api/get-server', async (req: Request, res: Response) => {
       // TODO: get actual IP of EC2 instance
-      res.send('18.232.68.248')
+      console.log(await publicIpv4())
+      res.send(await publicIpv4())
     })
 
     app.listen(8080, function () {

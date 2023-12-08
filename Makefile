@@ -1,4 +1,4 @@
-.PHONY: run check build
+.PHONY: run build check setup kill reset
 
 run: build
 	docker-compose up -d
@@ -6,7 +6,7 @@ run: build
 build: check
 	docker-compose build
 
-check:
+check: setup
 	npm run lint
 	npm run check-types
 

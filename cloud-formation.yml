@@ -126,7 +126,7 @@ Resources:
       LaunchTemplateName: 'EC2LaunchTemplate'
       LaunchTemplateData:
         KeyName: 'csc409a3ec2'
-        ImageId: 'ami-0d5409252f976c841'
+        ImageId: 'ami-07cb818f0a86f3bdb'
         InstanceType: 't2.small'
         NetworkInterfaces:
           - AssociatePublicIpAddress: 'True'

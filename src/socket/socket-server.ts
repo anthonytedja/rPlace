@@ -1,20 +1,20 @@
 import WebSocket from 'ws'
 
-import { Database } from '../api/database/database'
-import { Cache } from '../api/cache/cache'
+import { IDatabase } from '../types'
+import { ICache } from '../types'
+import { IBroadcastChannel } from '../types'
 import { Board } from '../domain/board'
-import { BroadcastChannel } from '../api/broadcast-channel/broadcast-channel'
 
 import { Connection } from './connection'
 import { UserHandler } from '../domain/user-handler'
 
 export class SocketServer {
   wss: WebSocket.Server
-  database: Database
-  cache: Cache
+  database: IDatabase
+  cache: ICache
   board: Board = new Board()
   userHandler: UserHandler
-  broadcastChannel: BroadcastChannel
+  broadcastChannel: IBroadcastChannel
 
   async setup(): Promise<void> {
     const data = await this.database.getAndFormatBoard()
@@ -23,16 +23,14 @@ export class SocketServer {
   }
 
   async establishBroadcastChannel(): Promise<any> {
-    return new Promise<void>(async (resolve, reject) => {
+    return new Promise<void>(async (resolve, {}) => {
       await this.broadcastChannel.init()
       await this.broadcastChannel.subscribeToChannel(this.handleUpdateFromClient.bind(this))
-      console.log("subscribed to broadcast channel")
-      
       resolve()
     })
   }
 
-  constructor(database: Database, cache: Cache, broadcastChannel: BroadcastChannel) {
+  constructor(database: IDatabase, cache: ICache, broadcastChannel: IBroadcastChannel) {
     this.wss = new WebSocket.Server({ port: 8081 })
     this.database = database
     this.cache = cache
@@ -43,7 +41,7 @@ export class SocketServer {
 
   async handleUpdateFromClient(message: any, channel: any) {
     console.log(message, channel)
-    
+
     var data = JSON.parse(message)
     const [x, y, colorIdx, user] = [data.x, data.y, data.color, data.user]
     if (x == undefined || y == undefined || colorIdx == undefined || user == undefined) {
@@ -62,7 +60,9 @@ export class SocketServer {
 
       this.broadcast(message)
       await this.cache.set(x, y, colorIdx)
-      await this.board.setPixel(x, y, colorIdx, user)
+      await this.board.setPixel(x, y, colorIdx)
+      await this.database.set(x, y, colorIdx)
+      await this.database.setUserActionTimestamp(user)
     } else {
       console.log('invalid set')
     }

@@ -1,11 +1,6 @@
-import { DevDatabase } from '../api/database/impl/dev-database'
-import { AWSDatabase } from '../api/database/impl/aws-database'
 import { MAX_COLOR_INDEX } from './color'
 import { DimensionConvert } from './dimension-convert'
 import { BoardDataGrid } from './board-data-grid'
-
-//const db = new DevDatabase()
-const db = new AWSDatabase()
 
 export class Board {
   static size: number = 1000
@@ -43,7 +38,7 @@ export class Board {
     )
   }
 
-  async setPixel(x: number, y: number, colorIdx: number, userIP: string) {
+  async setPixel(x: number, y: number, colorIdx: number) {
     if (colorIdx > MAX_COLOR_INDEX) {
       throw new Error(`Invalid color: ${colorIdx}`)
     }
@@ -55,8 +50,6 @@ export class Board {
     let idx = DimensionConvert.PosToCell(x, y)
     this.data.setPixel(idx, colorIdx)
 
-    await db.set(x, y, colorIdx)
-    await db.setUserActionTimestamp(userIP)
     console.log(`SET: ${x} ${y} ${colorIdx}`)
   }
 }

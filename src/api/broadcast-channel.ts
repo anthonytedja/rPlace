@@ -1,15 +1,25 @@
-import { BroadcastChannel } from '../broadcast-channel'
-import { createClient as redisCreateClient } from 'redis'
+import { createClient } from 'redis'
+import { IBroadcastChannel } from '../types'
 
-export class DevBroadcastChannel implements BroadcastChannel {
+export class BroadcastChannel implements IBroadcastChannel {
   subscriber: any
   publisher: any
 
   async init(): Promise<void> {
-    this.subscriber = redisCreateClient({ url: 'redis://redis:6379' })
+    this.subscriber = createClient({
+      url:
+        process.env.NODE_ENV === 'development'
+          ? 'redis://redis:6379'
+          : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
+    })
     this.subscriber.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
 
-    this.publisher = redisCreateClient({ url: 'redis://redis:6379' })
+    this.publisher = createClient({
+      url:
+        process.env.NODE_ENV === 'development'
+          ? 'redis://redis:6379'
+          : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
+    })
     this.publisher.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
 
     return this.subscriber.connect().then(() => this.publisher.connect())

@@ -1,15 +1,29 @@
-# r/Waste
+# r/Place
 
-> r/Place but shit
+> r/Place clone with AWS services
 
-## Check if code is ok
+## Table of Contents
 
-`make check`
+- [Running The System](#running-the-system)
+  - [Initial Setup](#initial-setup)
 
-## Run all services
+## Configurations
 
-`make run`
+## Running The System
 
-## Run only server (delete this once we implement the other services)
+### Local Development
 
-`make run-server`
+#### Initial Setup
+
+> Caveat: Docker does not setup cassandra keyspace schema automatically. You will need to run the cassadra image and the following command to setup the keyspace before running the application.
+
+```bash
+docker-compose up cassandra
+docker exec -it cassandra cqlsh -f "/docker-entrypoint-initdb.d/schema.cql"
+```
+
+Run the service locally on port 8080
+
+```bash
+make
+```

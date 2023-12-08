@@ -1,13 +1,17 @@
+import { Board } from '../domain/board'
 import { createClient as redisCreateClient } from 'redis'
+import { ICache } from '../types'
 
-import { Board } from '../../../domain/board'
-import { Cache } from '../cache'
-
-export class DevCache implements Cache {
+export class Cache implements ICache {
   client = this.createClient()
 
   async createClient() {
-    const client = redisCreateClient({ url: 'redis://redis:6379' })
+    const client = redisCreateClient({
+      url:
+        process.env.NODE_ENV === 'development'
+          ? 'redis://redis:6379'
+          : 'redis://somecache-002.fxt3pv.0001.use1.cache.amazonaws.com:6379',
+    })
     client.on('error', (err: string) => console.log('REDIS CLIENT ERROR', err))
     await client.connect()
     return client

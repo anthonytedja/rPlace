@@ -1,15 +1,15 @@
-import { Database } from '../api/database/database'
+import { IDatabase } from '../types'
 
 export class UserHandler {
-  static rateLimit: number = 30000
+  static rateLimit: number = 300000
 
-  constructor(private database: Database) {}
+  constructor(private database: IDatabase) {}
 
   /**
    * @returns true if the user can update the board (last update was > 5 minutes ago)
    */
   async canUpdate(userIP: string) {
-    console.log("checking if", userIP, "can update")
+    console.log('checking if', userIP, 'can update')
     const lastTimestamp = await this.database.getUserActionTimestamp(userIP)
     if (lastTimestamp === null) return true
     const now = new Date()

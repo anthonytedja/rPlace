@@ -41,7 +41,11 @@
   },
   // Spell checker
   "cSpell.words": [
-    "ABGR"
+    "ABGR",
+    "coordinatex",
+    "coordinatey",
+    "KEYSPACE",
+    "userip"
   ],
   "cSpell.language": "en"
 }

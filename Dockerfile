@@ -15,8 +15,12 @@ RUN npm install --production
 
 COPY --from=build /usr/src/app/dist dist
 COPY static .
+COPY .env .
 
 EXPOSE 8080
 EXPOSE 8081
 
-CMD [ "node", "dist/serve/main.js"]
+# For development
+# CMD ["node", "-r", "dotenv/config", "dist/serve/main.js", "dotenv_config_path=./.env"]
+
+CMD ["node", "dist/serve/main.js"]

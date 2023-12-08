@@ -1,20 +1,13 @@
 import path from 'path'
-import { DevCache } from '../api/cache/impl/dev-cache'
-import { DevDatabase } from '../api/database/impl/dev-database'
-import { DevBroadcastChannel } from '../api/broadcast-channel/impl/dev-channel'
-import { AWSCache } from '../api/cache/impl/aws-cache'
-import { AWSDatabase } from '../api/database/impl/aws-database'
-import { AWSBroadcastChannel } from '../api/broadcast-channel/impl/aws-channel'
+import { Database } from '../api/database'
+import { Cache } from '../api/cache'
+import { BroadcastChannel } from '../api/broadcast-channel'
 import { SocketServer } from '../socket/socket-server'
 import { Request, Response } from 'express'
 
-//const database = new DevDatabase()
-//const cache = new DevCache()
-// const broadcastChannel = new DevBroadcastChannel()
-const database = new AWSDatabase()
-const cache = new AWSCache()
-const broadcastChannel = new AWSBroadcastChannel()
-const ss = new SocketServer(database, cache, broadcastChannel)
+console.log(process.env)
+
+const ss = new SocketServer(new Database(), new Cache(), new BroadcastChannel())
 
 ss.setup()
   .then(() => ss.establishBroadcastChannel())

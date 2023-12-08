@@ -2,15 +2,15 @@ CREATE KEYSPACE r_place
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
 
 CREATE TABLE r_place.color_mappings (
-    coordinateX int,
-    coordinateY int,
+    coordinatex int,
+    coordinatey int,
     color int,
     timestamp timestamp,
-    PRIMARY KEY (coordinateX, coordinateY)
+    PRIMARY KEY (coordinatex, coordinatey)
 );
 
 CREATE TABLE r_place.timestamps (
-    userIP text,
+    userip text,
     timestamp timestamp,
-    PRIMARY KEY (userIP)
+    PRIMARY KEY (userip)
 );

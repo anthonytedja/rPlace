@@ -165,9 +165,9 @@ Resources:
       TableName: 'color_mappings'
       KeyspaceName: !Ref KeySpace
       PartitionKeyColumns:
-        - ColumnName: 'coordinateX'
+        - ColumnName: 'coordinatex'
           ColumnType: 'int'
-        - ColumnName: 'coordinateY'
+        - ColumnName: 'coordinatey'
           ColumnType: 'int'
       RegularColumns:
         - ColumnName: 'color'
@@ -181,7 +181,7 @@ Resources:
       TableName: 'timestamps'
       KeyspaceName: !Ref KeySpace
       PartitionKeyColumns:
-        - ColumnName: 'userIP'
+        - ColumnName: 'userip'
           ColumnType: 'text'
       RegularColumns:
         - ColumnName: 'timestamp'

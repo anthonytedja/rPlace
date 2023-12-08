@@ -42,9 +42,11 @@
   // Spell checker
   "cSpell.words": [
     "ABGR",
+    "cassadra",
     "coordinatex",
     "coordinatey",
     "KEYSPACE",
+    "Keyspaces",
     "userip"
   ],
   "cSpell.language": "en"

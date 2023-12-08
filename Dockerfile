@@ -21,6 +21,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 # For development
-# CMD ["node", "-r", "dotenv/config", "dist/serve/main.js", "dotenv_config_path=./.env"]
+CMD ["node", "-r", "dotenv/config", "dist/serve/main.js", "dotenv_config_path=./.env"]
 
-CMD ["node", "dist/serve/main.js"]
+# For production
+# CMD ["node", "dist/serve/main.js"]

@@ -143,6 +143,30 @@ Resources:
         LaunchTemplateId: !Ref EC2LaunchTemplate
         Version: '1'
 
+  EC2LaunchTemplate2:
+    Type: 'AWS::EC2::LaunchTemplate'
+    DependsOn: VPCSubnet2
+    Properties:
+      LaunchTemplateName: 'EC2LaunchTemplate2'
+      LaunchTemplateData:
+        KeyName: 'csc409a3ec2'
+        ImageId: 'ami-07cb818f0a86f3bdb'
+        InstanceType: 't2.small'
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: 'True'
+            DeviceIndex: 0
+            SubnetId: !Ref VPCSubnet2
+            Groups:
+              - !Ref EC2SecurityGroup
+
+  EC2Instance2:
+    Type: 'AWS::EC2::Instance'
+    DependsOn: EC2LaunchTemplate2
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref EC2LaunchTemplate2
+        Version: '1'
+
   ElasticLoadBalancingV2TargetGroup:
     Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
     DependsOn: EC2Instance
@@ -207,6 +231,9 @@ Resources:
       Targets: 
         - 
           Id: !Ref EC2Instance
+          Port: 80
+        - 
+          Id: !Ref EC2Instance2
           Port: 80
 
   ElasticLoadBalancingV2LoadBalancer:

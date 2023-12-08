@@ -1,7 +1,7 @@
 import { IDatabase } from '../types'
 
 export class UserHandler {
-  static rateLimit: number = 300000
+  static rateLimit: number = process.env.NODE_ENV === 'development' ? 0 : 300000
 
   constructor(private database: IDatabase) {}
 

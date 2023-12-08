@@ -39,6 +39,12 @@
         flex: 1;
         text-align: center;
         padding: 1rem;
+        border-radius: 1rem;
+        border: 1px solid black;
+        cursor: pointer;
+      }
+      input[type='number'] {
+        cursor: initial;
       }
       #tooltip {
         position: absolute;
@@ -81,7 +87,7 @@
         <option value="14">Magenta</option>
         <option value="15">Purple</option>
       </select>
-      <input type="submit" name="set" value="Submit" />
+      <button type="submit">Submit</button>
     </form>
   </body>
 </html>

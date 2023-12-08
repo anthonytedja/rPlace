@@ -19,7 +19,7 @@ $(function () {
       })
   }
   socket.onclose = function (event) {
-    alert('closed code:' + event.code + ' reason:' + event.reason + ' wasClean:' + event.wasClean)
+    alert('Closed Code:' + event.code + ' Reason:' + event.reason + ' wasClean:' + event.wasClean)
   }
   socket.onmessage = function (event) {
     var o = JSON.parse(event.data)

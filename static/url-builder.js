@@ -1,6 +1,6 @@
 // TODO: get static URL for load balancer
 
-const devMode = false
+const devMode = true
 
 const domain = devMode
   ? window.location.host

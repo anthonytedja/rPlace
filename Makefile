@@ -1,9 +1,6 @@
 .PHONY: run build check setup kill reset
 
 run: build
-	docker-compose up -d
-
-run-dev: build
 	docker-compose up
 
 build: check

@@ -7,7 +7,7 @@ var socket
 $(async function () {
   let canvas = new PlaceCanvas(1000, 1000)
 
-  const devMode = false
+  const devMode = true
 
   socket = new WebSocket(`ws://${devMode ? window.location.hostname : await socketUrl}:8081`)
   socket.onopen = function () {

@@ -1,6 +1,6 @@
-# CSC409 A3 - r/Place
+# r/Place
 
-> r/Place clone using AWS services
+> r/Place using AWS services
 
 ## Table of Contents
 
@@ -116,7 +116,9 @@ docker-compose up cassandra
 docker exec -it cassandra cqlsh -f "/docker-entrypoint-initdb.d/schema.cql"
 ```
 
-Run the service locally to view the interface on `localhost:8080` with `make` or `make run-dev` to run the docker containers in the foreground.
+Make sure the javascript files inside the `static/` directory have devMode set to true.
+
+Run the service locally to view the interface on `localhost:8080` with `make`.
 
 ```bash
 $ make
@@ -130,6 +132,6 @@ $
 
 The system can be deployed by submitting the CloudFormation script to the CloudFormation service in AWS console.
 
-Static files that are sent to the bucket must be added manually. The files can be found under the `static/` directory in the repository. The URL specified by the `domain` variable in the `url-builder.js` file must be adjusted to the public URL of the current load balancer.
+Static files that are sent to the bucket must be added manually. The files can be found under the `static/` directory in the repository. The URL specified by the `domain` variable in the `url-builder.js` file must be adjusted to the public URL of the current load balancer and the `devMode` toggle must be false..
 
 Clients may begin interacting with the system by going to the CloudFront URL and receiving the client side files necessary to update the canvas.
